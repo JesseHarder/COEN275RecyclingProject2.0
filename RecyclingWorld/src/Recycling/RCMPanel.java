@@ -44,7 +44,9 @@ public class RCMPanel extends JPanel implements ActionListener {
 
     public RCMPanel(Color color) {
         setBackground(color);
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+        add(Box.createHorizontalStrut(10));
 
         displayPanel = new JPanel();
         displayPanel.setBackground(Color.GRAY);
@@ -66,13 +68,17 @@ public class RCMPanel extends JPanel implements ActionListener {
 
             displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
 
-        add(displayPanel, BorderLayout.CENTER);
+        add(displayPanel);
+
+        add(Box.createHorizontalStrut(10));
 
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setBackground(Color.DARK_GRAY);
         // Add buttons.
-        add(buttonsPanel, BorderLayout.EAST);
+        add(buttonsPanel);
+
+        add(Box.createHorizontalStrut(10));
     }
 
     public RCMPanel(Color color, RecyclingMachine RCM) {
