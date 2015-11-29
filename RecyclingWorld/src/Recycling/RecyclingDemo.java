@@ -23,7 +23,7 @@ public class RecyclingDemo {
     public RecyclingDemo() {
         mainFrame = new JFrame("Recycling Demo");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setPreferredSize(new Dimension(900,600));
+        mainFrame.setPreferredSize(new Dimension(1200,600));
 
         rmosPanel= new RMOSPanel();
         // Set up the RMOSPanel.
