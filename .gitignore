@@ -49,3 +49,6 @@ fabric.properties
 
 # Database separation
 RecyclingWorld/stats.db
+
+# Other
+RecyclingWorld/out/
