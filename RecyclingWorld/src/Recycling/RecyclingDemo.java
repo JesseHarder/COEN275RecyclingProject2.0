@@ -5,6 +5,8 @@ import Recycling.RecyclingData.RecyclingMonitoringStation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -40,13 +42,12 @@ public class RecyclingDemo {
 
         contentPane.add(rcmPanel);
         // Possibly call a setup function for rcmPanel here.
+        contentPane.add(Box.createRigidArea(new Dimension(10,0)));
         contentPane.add(rmosPanel);
         // Possibly call a setup function for rmosPanel here.
 
 
         mainFrame.pack();
         mainFrame.setVisible(true);
-
-
     }
 }
