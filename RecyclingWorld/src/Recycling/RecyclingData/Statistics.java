@@ -49,7 +49,7 @@ public class Statistics{
                             "DATE_D INT," +
                             "DATE_Y INT," +
                             "ITEM_TYPE TEXT," +
-                            "ITEM_WEIGHT INT," +
+                            "ITEM_WEIGHT REAL," +
                             "MONEY REAL);";
             query(sql,"Tables built.");
         }
