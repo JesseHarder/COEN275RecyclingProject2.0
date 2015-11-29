@@ -15,8 +15,10 @@ public class RCMPanel extends JPanel implements ActionListener {
 
     /* Interface elements */
     private JPanel displayPanel;
-    private JPanel buttonsPanel;
     private JPanel dispensePanel;
+    private JTextArea textArea;
+
+    private JPanel buttonsPanel;
 
     /* Public constants */
     public static final String depositButtonPressedString = "Deposit Button Pressed";
@@ -31,6 +33,7 @@ public class RCMPanel extends JPanel implements ActionListener {
     public JPanel getDisplayPanel() {return displayPanel;}
     public JPanel getButtonsPanel() {return buttonsPanel;}
     public JPanel getDispensePanel() {return dispensePanel;}
+    public JTextArea getTextArea() {return textArea;}
 
     /* Constructors */
 
@@ -44,10 +47,25 @@ public class RCMPanel extends JPanel implements ActionListener {
 
         displayPanel = new JPanel();
         displayPanel.setBackground(Color.GRAY);
-        displayPanel.setLayout(new BorderLayout());
+        displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
+
+            displayPanel.add(Box.createVerticalStrut(75));
+
+            textArea = new JTextArea();
+            textArea.setEditable(false);
+            displayPanel.add(textArea);
+
+            displayPanel.add(Box.createVerticalStrut(75));
+
+
             dispensePanel = new JPanel();
             dispensePanel.setBackground(Color.BLACK);
-            displayPanel.add(dispensePanel, BorderLayout.SOUTH);
+            dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
+            dispensePanel.add(Box.createVerticalStrut(40));
+            displayPanel.add(dispensePanel);
+
+            displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
+
         add(displayPanel, BorderLayout.CENTER);
 
         buttonsPanel = new JPanel();
@@ -55,8 +73,6 @@ public class RCMPanel extends JPanel implements ActionListener {
         buttonsPanel.setBackground(Color.DARK_GRAY);
         // Add buttons.
         add(buttonsPanel, BorderLayout.EAST);
-
-
     }
 
     public RCMPanel(Color color, RecyclingMachine RCM) {
@@ -67,10 +83,22 @@ public class RCMPanel extends JPanel implements ActionListener {
 
     /* Display updating */
     public void updateRCMDisplay() {
+        updateTextArea();
         updateButtons();
 
         validate();
         repaint();
+    }
+
+    public void updateTextArea() {
+        if (RCM != null) {
+            if (!RCM.isActive())
+                textArea.setText("INACTIVE");
+            else {
+
+            }
+
+        }
     }
 
     // To be called when the RCM's item list changes.

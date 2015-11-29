@@ -42,21 +42,12 @@ public class RecyclingDemo {
 
         contentPane.add(rcmPanel);
         // Possibly call a setup function for rcmPanel here.
+        contentPane.add(Box.createRigidArea(new Dimension(10,0)));
         contentPane.add(rmosPanel);
         // Possibly call a setup function for rmosPanel here.
 
 
         mainFrame.pack();
         mainFrame.setVisible(true);
-
-        Timer t = new Timer(3000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                testRCM.setPrice("bleh",9001.0);
-                rcmPanel.updateRCMDisplay();
-            }
-        });
-        t.start();
-
     }
 }
