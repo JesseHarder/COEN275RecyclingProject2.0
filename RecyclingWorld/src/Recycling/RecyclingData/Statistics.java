@@ -50,8 +50,7 @@ public class Statistics{
                             "DATE_Y INT," +
                             "ITEM_TYPE TEXT," +
                             "ITEM_WEIGHT INT," +
-                            "MONEY REAL," +
-                            "PRIMARY KEY(ID,DATE_M,DATE_D,DATE_Y,ITEM_TYPE,ITEM_WEIGHT));";
+                            "MONEY REAL);";
             query(sql,"Tables built.");
         }
 
