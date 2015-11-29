@@ -5,6 +5,8 @@ import Recycling.RecyclingData.RecyclingMonitoringStation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -47,7 +49,14 @@ public class RecyclingDemo {
         mainFrame.pack();
         mainFrame.setVisible(true);
 
-        testRCM.setPrice("bleh",9001.0);
-        rcmPanel.updateRCMDisplay();
+        Timer t = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                testRCM.setPrice("bleh",9001.0);
+                rcmPanel.updateRCMDisplay();
+            }
+        });
+        t.start();
+
     }
 }

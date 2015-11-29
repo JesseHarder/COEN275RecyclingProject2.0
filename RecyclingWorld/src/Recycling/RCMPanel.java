@@ -66,6 +66,9 @@ public class RCMPanel extends JPanel implements ActionListener {
     /* Display updating */
     public void updateRCMDisplay() {
         updateButtons();
+
+        validate();
+        repaint();
     }
 
     // To be called when the RCM's item list changes.
