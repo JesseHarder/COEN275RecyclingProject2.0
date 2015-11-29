@@ -47,6 +47,7 @@ public class RecyclingDemo {
         mainFrame.pack();
         mainFrame.setVisible(true);
 
-
+        testRCM.setPrice("bleh",9001.0);
+        rcmPanel.updateRCMDisplay();
     }
 }
