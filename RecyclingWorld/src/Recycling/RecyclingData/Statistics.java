@@ -19,7 +19,7 @@ public class Statistics{
 //                System.out.println("Opened database successfully");
         }
 
-        private static void query(String sql, String message){
+        private static void update(String sql, String message){
             Connection c = null;
             Statement stmt = null;
 
@@ -40,6 +40,12 @@ public class Statistics{
             }
             System.out.println(message);}
 
+
+        public static void dropTables(){
+            String sql = "DROP TABLE IF EXISTS TRANSACTIONS";
+            update(sql,"Tables dropped. Starting from a fresh slate!");
+        }
+
         public static void makeTables() {
 
             String sql =
@@ -51,8 +57,9 @@ public class Statistics{
                             "ITEM_TYPE TEXT," +
                             "ITEM_WEIGHT REAL," +
                             "MONEY REAL);";
-            query(sql,"Tables built.");
+            update(sql,"Tables built. Ready to run statistics.");
         }
+
 
         public static void logTransaction(String id, String item_type, double units, double price){
 
@@ -64,7 +71,30 @@ public class Statistics{
             int day = cal.get(Calendar.DAY_OF_MONTH);
             int year = cal.get(Calendar.YEAR);
             String sql="INSERT INTO TRANSACTIONS VALUES ('"+id+"','"+month+"','"+day+"','"+year+"','"+item_type+"','"+units+"','"+money_dispensed+"');";
-            query(sql,"Transaction logged to database.");
+            update(sql,"Transaction logged to database.");
+        }
+
+        public static ResultSet query(String sql, String message) throws SQLException, ClassNotFoundException {
+            Connection c = null;
+            Statement stmt = null;
+            ResultSet rs;
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:stats.db");
+            c.setAutoCommit(false);
+            stmt = c.createStatement();
+            rs = stmt.executeQuery( sql );
+
+            System.out.println(message);
+            return rs;
+        }
+
+
+        public static double getTotalItemWeightByID(String id) throws SQLException, ClassNotFoundException {
+            String sql = "SELECT SUM(ITEM_WEIGHT) AS TOTAL_WEIGHT FROM TRANSACTIONS WHERE ID='"+id+"'";
+            ResultSet rs = query(sql,"Finding total weight of items put into Machine ID: "+id);
+            double total_weight = rs.getDouble("TOTAL_WEIGHT");
+            return total_weight;
+
         }
 }
 
