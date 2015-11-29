@@ -1,6 +1,7 @@
 package Recycling;
 
 import Recycling.RecyclingData.RecyclingMachine;
+import Recycling.RecyclingData.Statistics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +77,10 @@ public class RCMPanel extends JPanel implements ActionListener {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    String id = RCM.getID();
+                    double price = RCM.getPriceList().get(name);
                     double weight = 2.5; // Eventually randomize this.
+                    Statistics.logTransaction(id,name,weight,price);
 //                    RCM.depositItem(name, weight);
                     JOptionPane.showMessageDialog( null,
                             "Depositing "+weight+" pounds of "+name+".");
