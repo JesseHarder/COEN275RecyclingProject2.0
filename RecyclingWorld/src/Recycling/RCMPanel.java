@@ -58,7 +58,6 @@ public class RCMPanel extends JPanel implements ActionListener {
 
             displayPanel.add(Box.createVerticalStrut(75));
 
-
             dispensePanel = new JPanel();
             dispensePanel.setBackground(Color.BLACK);
             dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
