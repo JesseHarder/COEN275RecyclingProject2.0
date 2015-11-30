@@ -94,7 +94,15 @@ public class Statistics{
             ResultSet rs = query(sql,"Finding total weight of items put into Machine ID: "+id);
             double total_weight = rs.getDouble("TOTAL_WEIGHT");
             return total_weight;
-
         }
+
+    public static double getTotalMoneyByID(String id) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT SUM(MONEY) AS TOTAL_MONEY FROM TRANSACTIONS WHERE ID='"+id+"'";
+        ResultSet rs = query(sql,"Finding total weight of items put into Machine ID: "+id);
+        double total_money = rs.getDouble("TOTAL_MONEY");
+        return total_money;
+    }
+
+
 }
 
