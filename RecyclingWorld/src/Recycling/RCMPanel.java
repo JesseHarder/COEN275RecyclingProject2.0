@@ -163,28 +163,30 @@ public class RCMPanel extends JPanel implements ActionListener {
     // To be called when the RCM's item list changes.
     public void updateButtons() {
         buttonsPanel.removeAll();
-        for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
-            String name = entry.getKey();
-            double price = entry.getValue();
-            JButton button = new JButton(name+": $"+price+"/lb");
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String id = RCM.getID();
-                    double price = RCM.getPriceList().get(name);
-                    double weight = 2.5; // Eventually randomize this.
-                    Statistics.logTransaction(id,name,weight,price);
+        if (RCM != null) {
+            for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
+                String name = entry.getKey();
+                double price = entry.getValue();
+                JButton button = new JButton(name+": $"+price+"/lb");
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String id = RCM.getID();
+                        double price = RCM.getPriceList().get(name);
+                        double weight = 2.5; // Eventually randomize this.
+                        Statistics.logTransaction(id,name,weight,price);
 //                    RCM.depositItem(name, weight);
-                    JOptionPane.showMessageDialog( null,
-                            "Depositing "+weight+" pounds of "+name+".");
-                }
-            });
-            button.setActionCommand(depositButtonPressedString);
-            buttonsPanel.add(button);
+                        JOptionPane.showMessageDialog( null,
+                                "Depositing "+weight+" pounds of "+name+".");
+                    }
+                });
+                button.setActionCommand(depositButtonPressedString);
+                buttonsPanel.add(button);
 //            buttonsPanel.add(Box.createRigidArea(new Dimension(0,10)));
-        }
+            }
 
-        buttonsPanel.add(Box.createVerticalStrut(20));
+            buttonsPanel.add(Box.createVerticalStrut(20));
+        }
         buttonsPanel.add(getPaidButton);
     }
 

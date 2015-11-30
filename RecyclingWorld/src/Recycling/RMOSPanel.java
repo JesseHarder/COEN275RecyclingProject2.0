@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 public class RMOSPanel extends JPanel {
     /* Data */
     private boolean loggedIn;
+    private boolean updatingJList;
     private RecyclingMonitoringStation RMOS;
     private RCMPanel rcmPanel;
 
@@ -81,6 +82,7 @@ public class RMOSPanel extends JPanel {
     public RMOSPanel(Color color) {
         // Data setup.
         loggedIn = false;
+        updatingJList = false;
 
         RMOS = new RecyclingMonitoringStation();
         RMOS.testPrep();
@@ -175,8 +177,10 @@ public class RMOSPanel extends JPanel {
                 rcmJList.addListSelectionListener(new ListSelectionListener() {
                     @Override
                     public void valueChanged(ListSelectionEvent e) {
-                        updateButtonPanel();
-                        updateRCMPanel();
+                        if (!updatingJList) {
+                            updateButtonPanel();
+                            updateRCMPanel();
+                        }
                     }
                 });
                 centerPanel.add(rcmJList);
@@ -194,7 +198,8 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Add machine button logic here.
-
+                        RMOS.addMachine();
+                        updateRCMList();
                     }
                 });
 
@@ -264,28 +269,43 @@ public class RMOSPanel extends JPanel {
     }
 
     public void updateRCMList() {
+        updatingJList = true;
+        int indexTemp = rcmJList.getSelectedIndex();
         rcmListModel.clear();
 
         for (RecyclingMachine RCM:RMOS.getMachines()) {
             rcmListModel.addElement(RCM.getID());
         }
+
         rcmJList.setModel(rcmListModel);
-        rcmJList.setSelectedIndex(0);
+        if (indexTemp < 0) {
+            rcmJList.setSelectedIndex(0);
+        } else if (indexTemp >= rcmJList.getModel().getSize()) {
+            rcmJList.setSelectedIndex(rcmJList.getModel().getSize() - 1);
+        } else {
+            rcmJList.setSelectedIndex(indexTemp);
+        }
+
+        updatingJList = false;
     }
 
     //Returns the index for the currently select RCM.
     //Returns -1 if the list is empty.
     public int selectedRCMIndex() {
-        if (RMOS.getMachines().isEmpty())
+        if (RMOS.getMachines().isEmpty() || rcmJList.getModel().getSize() == 0)
+        {
             return -1;
+        }
         else
+        {
             return rcmJList.getSelectedIndex();
+        }
     }
 
     //Returns the currently select RCM.
     //Returns null if the list is empty.
     public RecyclingMachine selectedRCM() {
-        if (RMOS.getMachines().isEmpty())
+        if (RMOS.getMachines().isEmpty() || rcmJList.getModel().getSize() == 0)
             return null;
         else
             return RMOS.getMachines().get(rcmJList.getSelectedIndex());
@@ -294,11 +314,13 @@ public class RMOSPanel extends JPanel {
     // Updates any buttons on the button panel that are dynamic.
     public void updateButtonPanel() {
         boolean RMOSisEmpty = RMOS.getMachines().isEmpty();
+        boolean jListIsEmpty = rcmJList.getModel().getSize() == 0;
 
-        if (RMOSisEmpty) {
+        if (RMOSisEmpty || jListIsEmpty) {
             activateDeactivateButton.setText(activateString);
         } else {
             int index = selectedRCMIndex();
+            System.out.println(index);
             RecyclingMachine RCM = RMOS.getMachines().get(index);
             // Choosing whether activate button reads "activate" or "deactivate".
             if (RCM.isActive())
@@ -318,7 +340,7 @@ public class RMOSPanel extends JPanel {
     public void updateRCMPanel() {
         if (rcmPanel != null) {
             if (loggedIn) {
-                if (RMOS.getMachines().isEmpty()) {
+                if (RMOS.getMachines().isEmpty() || rcmJList.getModel().getSize() == 0) {
                     rcmPanel.setRCM(null);
                     rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
                 } else {
