@@ -99,9 +99,9 @@ public class RCMPanel extends JPanel implements ActionListener {
     public void updateTextArea() {
         if (RCM != null) {
             if (!RCM.isActive())
-                textArea.setText("INACTIVE");
+                textArea.setText("RCM "+RCM.getID()+" is INACTIVE");
             else {
-
+                textArea.setText("RCM "+RCM.getID()+" is ACTIVE");
             }
 
         }
