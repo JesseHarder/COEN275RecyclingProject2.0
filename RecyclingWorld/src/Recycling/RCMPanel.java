@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -110,8 +111,10 @@ public class RCMPanel extends JPanel implements ActionListener {
     // To be called when the RCM's item list changes.
     public void updateButtons() {
         buttonsPanel.removeAll();
-        for (String name:RCM.getPriceList().keySet()) {
-            JButton button = new JButton(name);
+        for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
+            String name = entry.getKey();
+            double price = entry.getValue();
+            JButton button = new JButton(name+": "+price+"/lb");
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
