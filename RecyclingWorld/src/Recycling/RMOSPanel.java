@@ -14,13 +14,17 @@ import java.awt.event.ActionListener;
  * Created by JHarder on 11/28/15.
  */
 public class RMOSPanel extends JPanel {
+    /* Data */
+    private boolean loggedIn;
     private RecyclingMonitoringStation RMOS;
     private RCMPanel rcmPanel;
 
+    /* Public constants */
     public static final String authenticationCardString = "Authentication Card";
     public static final String controlCardString = "Control Card";
     public static final String loginButtonPressedString= "Login Button Pressed";
 
+    /* Interface Elements */
     CardLayout cards;
     JPanel cardPanel;
 
@@ -64,6 +68,8 @@ public class RMOSPanel extends JPanel {
 
     public RMOSPanel(Color color) {
         // Data setup.
+        loggedIn = false;
+
         RMOS = new RecyclingMonitoringStation();
         RMOS.testPrep();
 
@@ -116,9 +122,10 @@ public class RMOSPanel extends JPanel {
 
                     // Either switch view or display error message.
                     if (verified) {
+                        loggedIn = true;
                         passwordErrorMessageLabel.setVisible(false);
                         cards.show(cardPanel, controlCardString);
-                        // Might need to do verify and redraw here.
+                        updateRCMPanel();
                     } else {
                        passwordErrorMessageLabel.setVisible(true);
                     }
@@ -196,8 +203,13 @@ public class RMOSPanel extends JPanel {
 
     public void updateRCMPanel() {
         if (rcmPanel != null) {
-            int index = rcmList.getSelectedIndex();
-            rcmPanel.setRCM(RMOS.getMachines().get(index));
+            if (loggedIn) {
+                int index = rcmList.getSelectedIndex();
+                rcmPanel.setRCM(RMOS.getMachines().get(index));
+                rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
+            } else {
+                rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.preAuthenticationCardString);
+            }
         }
     }
 }
