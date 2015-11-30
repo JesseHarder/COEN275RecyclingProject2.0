@@ -26,6 +26,8 @@ public class RMOSPanel extends JPanel {
 
     // For authentication.
     JPanel authenticationCard;
+        JLabel usernameLabel, passwordLabel;
+        JTextField usernameField, passwordField;
         JButton loginButton;
 
     // For the actual RMOS controls.
@@ -79,7 +81,28 @@ public class RMOSPanel extends JPanel {
 
         authenticationCard = new JPanel();
         authenticationCard.setBackground(color);
-        authenticationCard.setLayout(new FlowLayout());
+        authenticationCard.setLayout(new BoxLayout(authenticationCard, BoxLayout.Y_AXIS));
+
+            authenticationCard.add(Box.createVerticalGlue());
+
+            JPanel usernamePanel = new JPanel();
+            usernamePanel.setBackground(color);
+            usernamePanel.setLayout(new FlowLayout());
+                usernameLabel = new JLabel("Username:");
+                usernamePanel.add(usernameLabel);
+                usernameField = new JTextField(10);
+                usernamePanel.add(usernameField);
+            authenticationCard.add(usernamePanel);
+
+            JPanel passwordPanel = new JPanel();
+            passwordPanel.setBackground(color);
+            passwordPanel.setLayout(new FlowLayout());
+                passwordLabel = new JLabel("Password:");
+                passwordPanel.add(passwordLabel);
+                passwordField = new JTextField(10);
+                passwordPanel.add(passwordField);
+            authenticationCard.add(passwordPanel);
+
 
             loginButton = new JButton("Login");
             loginButton.setActionCommand(loginButtonPressedString);
@@ -87,6 +110,8 @@ public class RMOSPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     boolean verified = false;
+                    String username = usernameField.getText();
+                    String password = passwordField.getText();
                     // Password verification here. For now, just always verify.
                     verified = true;
 
@@ -101,7 +126,7 @@ public class RMOSPanel extends JPanel {
             });
             authenticationCard.add(loginButton);
 
-
+            authenticationCard.add(Box.createVerticalGlue());
 
         // Now Set up the control card.
 
