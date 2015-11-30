@@ -21,6 +21,7 @@ public class RCMPanel extends JPanel implements ActionListener {
     private JTextArea textArea;
 
     private JPanel buttonsPanel;
+    private JButton getPaidButton;
 
     /* Public constants */
     public static final String depositButtonPressedString = "Deposit Button Pressed";
@@ -72,6 +73,9 @@ public class RCMPanel extends JPanel implements ActionListener {
         add(displayPanel);
 
         add(Box.createHorizontalStrut(10));
+
+        getPaidButton = new JButton("Get Paid");
+        // Steup what button does here.
 
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
@@ -131,6 +135,9 @@ public class RCMPanel extends JPanel implements ActionListener {
             buttonsPanel.add(button);
 //            buttonsPanel.add(Box.createRigidArea(new Dimension(0,10)));
         }
+
+        buttonsPanel.add(Box.createVerticalStrut(20));
+        buttonsPanel.add(getPaidButton);
     }
 
     /* Action Listener Methods */
