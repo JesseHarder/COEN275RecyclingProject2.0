@@ -29,6 +29,7 @@ public class RMOSPanel extends JPanel {
         JLabel usernameLabel, passwordLabel;
         JTextField usernameField, passwordField;
         JButton loginButton;
+        JLabel passwordErrorMessageLabel;
 
     // For the actual RMOS controls.
     JPanel controlCard;
@@ -109,22 +110,26 @@ public class RMOSPanel extends JPanel {
             loginButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    boolean verified = false;
                     String username = usernameField.getText();
                     String password = passwordField.getText();
-                    // Password verification here. For now, just always verify.
-                    verified = true;
+                    boolean verified = RMOS.verifyCredentials(username,password);
 
                     // Either switch view or display error message.
                     if (verified) {
+                        passwordErrorMessageLabel.setVisible(false);
                         cards.show(cardPanel, controlCardString);
                         // Might need to do verify and redraw here.
                     } else {
-                        // Display error message.
+                       passwordErrorMessageLabel.setVisible(true);
                     }
                 }
             });
             authenticationCard.add(loginButton);
+
+            passwordErrorMessageLabel = new JLabel("Incorrect username or password. Please try again.");
+            passwordErrorMessageLabel.setForeground(Color.RED);
+            passwordErrorMessageLabel.setVisible(false);
+            authenticationCard.add(passwordErrorMessageLabel);
 
             authenticationCard.add(Box.createVerticalGlue());
 
