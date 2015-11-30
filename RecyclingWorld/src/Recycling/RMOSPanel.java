@@ -232,8 +232,12 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Empty button logic here.
-                        JOptionPane.showMessageDialog( null,
-                                "Not implemented yet.");
+                        if(!RMOS.getMachines().isEmpty()){
+                            RecyclingMachine RCM = selectedRCM();
+                            RCM.empty();
+                            updateButtonPanel();
+                            updateRCMPanel();
+                        }
                     }
                 });
 
