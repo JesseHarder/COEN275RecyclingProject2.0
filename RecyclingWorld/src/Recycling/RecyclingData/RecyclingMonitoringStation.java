@@ -101,6 +101,22 @@ public class RecyclingMonitoringStation {
         return false;
     }
 
+    /* Username and Password Verification */
+
+    // Returns true if the given Username and Password are in the userPasswordMap.
+    // Otherwise returns false.
+    public boolean verifyCredentials(String username, String password) {
+        if (!userPaswordMap.containsKey(username))  // Username not in map.
+            return false;
+        else    // Username is in map. Proceed.
+        {
+            if (password.equals(userPaswordMap.get(username)))  // Password matches.
+                return true;
+            else    // Password does not match.
+                return false;
+        }
+    }
+
     /* Status Saving and Loading */
 
     public void saveStatus() {
