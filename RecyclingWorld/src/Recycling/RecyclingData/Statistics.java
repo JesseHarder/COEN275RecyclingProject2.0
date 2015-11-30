@@ -56,7 +56,8 @@ public class Statistics{
                             "DATE_Y INT," +
                             "ITEM_TYPE TEXT," +
                             "ITEM_WEIGHT REAL," +
-                            "MONEY REAL);";
+                            "MONEY REAL,"+
+                            "EMPTIED INT);";
             update(sql,"Tables built. Ready to run statistics.");
         }
 
@@ -70,9 +71,23 @@ public class Statistics{
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
             int year = cal.get(Calendar.YEAR);
-            String sql="INSERT INTO TRANSACTIONS VALUES ('"+id+"','"+month+"','"+day+"','"+year+"','"+item_type+"','"+units+"','"+money_dispensed+"');";
+            String sql="INSERT INTO TRANSACTIONS VALUES ('"+id+"','"+month+"','"+day+"','"+year+"','"+item_type+"','"+units+"','"+money_dispensed+"','0');";
             update(sql,"Transaction logged to database.");
         }
+
+    public static void logEmpty(String id){
+
+        java.util.Date date= new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int year = cal.get(Calendar.YEAR);
+        String sql="INSERT INTO TRANSACTIONS VALUES ('"+id+"','"+month+"','"+day+"','"+year+"','Emptied','0','0','1');";
+        update(sql,"Transaction logged to database.");
+    }
+
+
 
         public static ResultSet query(String sql, String message) throws SQLException, ClassNotFoundException {
             Connection c = null;
@@ -89,19 +104,28 @@ public class Statistics{
         }
 
 
+        public static double timesEmptied(String id) throws SQLException, ClassNotFoundException {
+            String sql = "SELECT COUNT(*) AS TOTAL FROM TRANSACTIONS WHERE ID='"+id+"' AND EMPTIED='1'";
+            ResultSet rs = query(sql,"Finding total number of empties performed on Machine ID "+id);
+            double total = rs.getDouble("TOTAL");
+            return total;
+        }
+
         public static double getTotalItemWeightByID(String id) throws SQLException, ClassNotFoundException {
-            String sql = "SELECT SUM(ITEM_WEIGHT) AS TOTAL_WEIGHT FROM TRANSACTIONS WHERE ID='"+id+"'";
-            ResultSet rs = query(sql,"Finding total weight of items put into Machine ID: "+id);
+            String sql = "SELECT SUM(ITEM_WEIGHT) AS TOTAL_WEIGHT FROM TRANSACTIONS WHERE ID='"+id+"' AND EMPTIED='0'";
+            ResultSet rs = query(sql,"Finding total money issued by Machine ID "+id);
             double total_weight = rs.getDouble("TOTAL_WEIGHT");
             return total_weight;
         }
 
-    public static double getTotalMoneyByID(String id) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT SUM(MONEY) AS TOTAL_MONEY FROM TRANSACTIONS WHERE ID='"+id+"'";
-        ResultSet rs = query(sql,"Finding total weight of items put into Machine ID: "+id);
-        double total_money = rs.getDouble("TOTAL_MONEY");
-        return total_money;
-    }
+        public static double getTotalMoneyByID(String id) throws SQLException, ClassNotFoundException {
+            String sql = "SELECT SUM(MONEY) AS TOTAL_MONEY FROM TRANSACTIONS WHERE ID='"+id+"' AND EMPTIED='0'";
+            ResultSet rs = query(sql,"Finding total weight of items put into Machine ID "+id);
+            double total_money = rs.getDouble("TOTAL_MONEY");
+            return total_money;
+        }
+
+
 
 
 }
