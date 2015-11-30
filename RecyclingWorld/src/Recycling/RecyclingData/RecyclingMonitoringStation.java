@@ -74,6 +74,10 @@ public class RecyclingMonitoringStation {
     public void addMachine() {
         RecyclingMachine RCM = new RecyclingMachine();
         RCM.setID(newID());
+        // Copy over the price list.
+        for (Map.Entry<String,Double> entry:priceList.entrySet()) {
+            RCM.setPrice(entry.getKey(), entry.getValue());
+        }
         machines.add(RCM);
     }
 
