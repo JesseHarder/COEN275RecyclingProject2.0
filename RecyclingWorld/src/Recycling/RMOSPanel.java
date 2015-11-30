@@ -41,8 +41,10 @@ public class RMOSPanel extends JPanel {
         JPanel centerPanel;
             JPanel displayArea;
             DefaultListModel<String> rcmListModel;
-            JList rcmList;
+            JList rcmJList;
         JPanel buttonPanel;
+            JButton addMachineButton;
+            JButton removeMachineButton;
             JButton logoutButton;
 
     /* Getters and Setters */
@@ -159,15 +161,15 @@ public class RMOSPanel extends JPanel {
                 centerPanel.add(Box.createHorizontalStrut(20));
 
                 rcmListModel = new DefaultListModel<String>();
-                rcmList = new JList();
+                rcmJList = new JList();
                 updateRCMList();
-                rcmList.addListSelectionListener(new ListSelectionListener() {
+                rcmJList.addListSelectionListener(new ListSelectionListener() {
                     @Override
                     public void valueChanged(ListSelectionEvent e) {
                         updateRCMPanel();
                     }
                 });
-                centerPanel.add(rcmList);
+                centerPanel.add(rcmJList);
 
             controlCard.add(centerPanel);
 
@@ -201,16 +203,21 @@ public class RMOSPanel extends JPanel {
             rcmListModel.addElement(RCM.getID());
         }
 
-        rcmList.setModel(rcmListModel);
-        rcmList.setSelectedIndex(0);
+        rcmJList.setModel(rcmListModel);
+        rcmJList.setSelectedIndex(0);
     }
 
     public void updateRCMPanel() {
         if (rcmPanel != null) {
             if (loggedIn) {
-                int index = rcmList.getSelectedIndex();
-                rcmPanel.setRCM(RMOS.getMachines().get(index));
-                rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
+                if (RMOS.getMachines().isEmpty()) {
+                    rcmPanel.setRCM(null);
+                    rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
+                } else {
+                    int index = rcmJList.getSelectedIndex();
+                    rcmPanel.setRCM(RMOS.getMachines().get(index));
+                    rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
+                }
             } else {
                 rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.preAuthenticationCardString);
             }

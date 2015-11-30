@@ -20,6 +20,7 @@ public class RCMPanel extends JPanel implements ActionListener {
     CardLayout cards;
     JPanel cardPanel;
         JPanel preAuthenticationCard;
+        JPanel noRCMCard;
         JPanel simCard;
             JPanel displayPanel;
             JPanel dispensePanel;
@@ -30,6 +31,7 @@ public class RCMPanel extends JPanel implements ActionListener {
 
     /* Public constants */
     public static final String preAuthenticationCardString = "Pre-Authentication Card";
+    public static final String noRCMCardString = "No RCM Card";
     public static final String simulationCardString = "Simulation Card";
     public static final String depositButtonPressedString = "Deposit Button Pressed";
 
@@ -66,8 +68,22 @@ public class RCMPanel extends JPanel implements ActionListener {
                 preAuthenticationCard.add(pleaseAuthenticateLabel, BorderLayout.CENTER);
                 preAuthenticationCard.add(Box.createHorizontalGlue());
 
-            // Set up card for primary functionality.
+            cardPanel.add(preAuthenticationCard,preAuthenticationCardString);
 
+            // Set up No RCM Card.
+            noRCMCard = new JPanel();
+            noRCMCard.setBackground(Color.BLACK);
+            noRCMCard.setLayout(new BoxLayout(noRCMCard,BoxLayout.X_AXIS));
+
+                noRCMCard.add(Box.createHorizontalGlue());
+                JLabel noRCMLabel = new JLabel("No RCM to Simulate");
+                pleaseAuthenticateLabel.setForeground(Color.RED);
+                noRCMCard.add(pleaseAuthenticateLabel, BorderLayout.CENTER);
+                noRCMCard.add(Box.createHorizontalGlue());
+
+            cardPanel.add(noRCMCard,noRCMCardString);
+
+            // Set up card for primary functionality.
             simCard = new JPanel();
             simCard.setBackground(color);
             simCard.setLayout(new BoxLayout(simCard, BoxLayout.X_AXIS));
@@ -108,11 +124,13 @@ public class RCMPanel extends JPanel implements ActionListener {
             simCard.add(buttonsPanel);
 
             simCard.add(Box.createHorizontalStrut(10));
-
-        cardPanel.add(preAuthenticationCard,preAuthenticationCardString);
         cardPanel.add(simCard, simulationCardString);
 
-        cards.show(cardPanel, simulationCardString);
+        if (RCM == null)
+            cards.show(cardPanel, noRCMCardString);
+        else
+            cards.show(cardPanel, simulationCardString);
+
         add(cardPanel, BorderLayout.CENTER);
     }
 
