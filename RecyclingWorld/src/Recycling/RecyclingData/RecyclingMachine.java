@@ -86,7 +86,7 @@ public class RecyclingMachine {
 
     public double getContentsWeight() {return itemContainer.getContentsWeight();}
     public void depositItem(String name, double weight) {itemContainer.depositItem(name,weight);}
-    public void empty() {itemContainer.empty();}
+    public void empty() {Statistics.logEmpty(this.getID()); itemContainer.empty();}
 
     /* Price List Management */
 
