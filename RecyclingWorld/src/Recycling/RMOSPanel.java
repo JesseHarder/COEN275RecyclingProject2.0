@@ -24,11 +24,12 @@ public class RMOSPanel extends JPanel {
     public static final String controlCardString = "Control Card";
     public static final String loginButtonPressedString = "Login Button Pressed";
 
+    public static final String addMachineButtonPressedString = "Add Machine Button Pressed";
+    public static final String removeMachineButtonPressedString = "Remove Machine Button Pressed";
     public static final String activateButtonPressedString = "Activate Button Pressed";
         public static final String activateString = "Activate";
         public static final String deactivateString = "Deactivate";
-    public static final String addMachineButtonPressedString = "Add Machine Button Pressed";
-    public static final String removeMachineButtonPressedString = "Remove Machine Button Pressed";
+    public static final String emptyButtonPressedString = "Empty Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
 
     /* Interface Elements */
@@ -49,9 +50,10 @@ public class RMOSPanel extends JPanel {
             DefaultListModel<String> rcmListModel;
             JList rcmJList;
         JPanel buttonPanel;
-            JButton activateDeactivateButton;
             JButton addMachineButton;
             JButton removeMachineButton;
+            JButton activateDeactivateButton;
+            JButton emptyMachineButton;
             JButton logoutButton;
 
     /* Getters and Setters */
@@ -184,6 +186,28 @@ public class RMOSPanel extends JPanel {
             buttonPanel = new JPanel();
             buttonPanel.setBackground(Color.DARK_GRAY);
             buttonPanel.setLayout(new FlowLayout());
+
+                // Setup add machine button
+                addMachineButton = new JButton("Add Machine");
+                addMachineButton.setActionCommand(addMachineButtonPressedString);
+                addMachineButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Add machine button logic here.
+                    }
+                });
+
+                // Setup remove machine button
+                removeMachineButton = new JButton("Remove Machine");
+                removeMachineButton.setActionCommand(removeMachineButtonPressedString);
+                removeMachineButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Remove machine button logic here.
+                    }
+                });
+
+                // Setup activate button
                 activateDeactivateButton = new JButton(activateString);
                 activateDeactivateButton.setActionCommand(activateButtonPressedString);
                 activateDeactivateButton.addActionListener(new ActionListener() {
@@ -197,8 +221,18 @@ public class RMOSPanel extends JPanel {
                         }
                     }
                 });
-                buttonPanel.add(activateDeactivateButton);
 
+                // Setup empty button
+                emptyMachineButton = new JButton("Empty Machine");
+                emptyMachineButton.setActionCommand(emptyButtonPressedString);
+                emptyMachineButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Empty button logic here.
+                    }
+                });
+
+                // Setup logout button.
                 logoutButton = new JButton("Logout");
                 logoutButton.setActionCommand(logoutButtonPressedString);
                 logoutButton.addActionListener(new ActionListener() {
@@ -209,7 +243,8 @@ public class RMOSPanel extends JPanel {
                         updateRCMPanel();
                     }
                 });
-                buttonPanel.add(logoutButton);
+
+                updateButtonPanel();
             controlCard.add(buttonPanel);
 
         cardPanel.add(authenticationCard, authenticationCardString);
@@ -217,9 +252,6 @@ public class RMOSPanel extends JPanel {
 
         cards.show(cardPanel, authenticationCardString); // Might need to move this up.
         add(cardPanel, BorderLayout.CENTER);
-
-        // Last minute adjustments
-        updateButtonPanel();
     }
 
     public void updateRCMList() {
@@ -253,7 +285,9 @@ public class RMOSPanel extends JPanel {
 
     // Updates any buttons on the button panel that are dynamic.
     public void updateButtonPanel() {
-        if (RMOS.getMachines().isEmpty()) {
+        boolean RMOSisEmpty = RMOS.getMachines().isEmpty();
+
+        if (RMOSisEmpty) {
             activateDeactivateButton.setText(activateString);
         } else {
             int index = selectedRCMIndex();
@@ -265,6 +299,12 @@ public class RMOSPanel extends JPanel {
                 activateDeactivateButton.setText(activateString);
         }
 
+        buttonPanel.removeAll();
+        buttonPanel.add(addMachineButton);
+        if (!RMOSisEmpty) buttonPanel.add(removeMachineButton);
+        if (!RMOSisEmpty) buttonPanel.add(activateDeactivateButton);
+        if (!RMOSisEmpty) buttonPanel.add(emptyMachineButton);
+        buttonPanel.add(logoutButton);
     }
 
     public void updateRCMPanel() {
