@@ -194,6 +194,8 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Add machine button logic here.
+                        JOptionPane.showMessageDialog( null,
+                                "Not implemented yet.");
                     }
                 });
 
@@ -204,6 +206,8 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Remove machine button logic here.
+                        JOptionPane.showMessageDialog( null,
+                                "Not implemented yet.");
                     }
                 });
 
@@ -229,6 +233,8 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Empty button logic here.
+                        JOptionPane.showMessageDialog( null,
+                                "Not implemented yet.");
                     }
                 });
 
