@@ -77,6 +77,30 @@ public class RecyclingMonitoringStation {
         machines.add(RCM);
     }
 
+    // Removes the first machine with the given ID, if found, from the list.
+    // Returns boolean representing whether or not a machine was removed.
+    public boolean removeMachineWithID(String ID) {
+        for (int i = 0; i < machines.size(); i++) {
+            RecyclingMachine RCM = machines.get(i);
+            if (ID.equals(RCM.getID())) {
+                machines.remove(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Removes the machine with the given index from the list if index is in bounds.
+    // Returns boolean representing whether or not a machine was removed.
+    public boolean removeMachineAtIndex(int index) {
+        if (index < machines.size()) {
+            machines.remove(index);
+            return true;
+        }
+        return false;
+    }
+
     /* Status Saving and Loading */
 
     public void saveStatus() {
