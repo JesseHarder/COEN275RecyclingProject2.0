@@ -74,6 +74,10 @@ public class RecyclingMonitoringStation {
     public void addMachine() {
         RecyclingMachine RCM = new RecyclingMachine();
         RCM.setID(newID());
+        // Copy over the price list.
+        for (Map.Entry<String,Double> entry:priceList.entrySet()) {
+            RCM.setPrice(entry.getKey(), entry.getValue());
+        }
         machines.add(RCM);
     }
 
@@ -99,6 +103,22 @@ public class RecyclingMonitoringStation {
             return true;
         }
         return false;
+    }
+
+    /* Username and Password Verification */
+
+    // Returns true if the given Username and Password are in the userPasswordMap.
+    // Otherwise returns false.
+    public boolean verifyCredentials(String username, String password) {
+        if (!userPaswordMap.containsKey(username))  // Username not in map.
+            return false;
+        else    // Username is in map. Proceed.
+        {
+            if (password.equals(userPaswordMap.get(username)))  // Password matches.
+                return true;
+            else    // Password does not match.
+                return false;
+        }
     }
 
     /* Status Saving and Loading */
@@ -200,6 +220,9 @@ public class RecyclingMonitoringStation {
         setPrice("Wood", 5.0);
         setPrice("Metal", 10.0);
         setPrice("Junk", 1.0);
+
+        userPaswordMap.put("","");
+        userPaswordMap.put("test","test");
     }
 
 }

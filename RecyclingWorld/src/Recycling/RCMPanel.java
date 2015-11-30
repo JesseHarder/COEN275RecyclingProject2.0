@@ -16,13 +16,23 @@ public class RCMPanel extends JPanel implements ActionListener {
     private RecyclingMachine RCM;
 
     /* Interface elements */
-    private JPanel displayPanel;
-    private JPanel dispensePanel;
-    private JTextArea textArea;
 
-    private JPanel buttonsPanel;
+    CardLayout cards;
+    JPanel cardPanel;
+        JPanel preAuthenticationCard;
+        JPanel noRCMCard;
+        JPanel simCard;
+            JPanel displayPanel;
+            JPanel dispensePanel;
+            JTextArea textArea;
+
+            JPanel buttonsPanel;
+            JButton getPaidButton;
 
     /* Public constants */
+    public static final String preAuthenticationCardString = "Pre-Authentication Card";
+    public static final String noRCMCardString = "No RCM Card";
+    public static final String simulationCardString = "Simulation Card";
     public static final String depositButtonPressedString = "Deposit Button Pressed";
 
     /* Getters and Setters */
@@ -32,11 +42,6 @@ public class RCMPanel extends JPanel implements ActionListener {
         updateRCMDisplay();
     }
 
-    public JPanel getDisplayPanel() {return displayPanel;}
-    public JPanel getButtonsPanel() {return buttonsPanel;}
-    public JPanel getDispensePanel() {return dispensePanel;}
-    public JTextArea getTextArea() {return textArea;}
-
     /* Constructors */
 
     public RCMPanel () {
@@ -44,42 +49,89 @@ public class RCMPanel extends JPanel implements ActionListener {
     }
 
     public RCMPanel(Color color) {
+        // Start by setting up cards at top level.
         setBackground(color);
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setLayout(new BorderLayout());
+        cards = new CardLayout();
+        cardPanel = new JPanel();
+        cardPanel.setLayout(cards);
 
-        add(Box.createHorizontalStrut(10));
+            // Set up card for requesting authentication.
 
-        displayPanel = new JPanel();
-        displayPanel.setBackground(Color.GRAY);
-        displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
+            preAuthenticationCard = new JPanel();
+            preAuthenticationCard.setBackground(Color.BLACK);
+            preAuthenticationCard.setLayout(new BoxLayout(preAuthenticationCard,BoxLayout.X_AXIS));
 
-            displayPanel.add(Box.createVerticalStrut(75));
+                preAuthenticationCard.add(Box.createHorizontalGlue());
+                JLabel pleaseAuthenticateLabel = new JLabel("Please Authenticate");
+                pleaseAuthenticateLabel.setForeground(Color.WHITE);
+                preAuthenticationCard.add(pleaseAuthenticateLabel, BorderLayout.CENTER);
+                preAuthenticationCard.add(Box.createHorizontalGlue());
 
-            textArea = new JTextArea();
-            textArea.setEditable(false);
-            displayPanel.add(textArea);
+            cardPanel.add(preAuthenticationCard,preAuthenticationCardString);
 
-            displayPanel.add(Box.createVerticalStrut(75));
+            // Set up No RCM Card.
+            noRCMCard = new JPanel();
+            noRCMCard.setBackground(Color.BLACK);
+            noRCMCard.setLayout(new BoxLayout(noRCMCard,BoxLayout.X_AXIS));
 
-            dispensePanel = new JPanel();
-            dispensePanel.setBackground(Color.BLACK);
-            dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
-            dispensePanel.add(Box.createVerticalStrut(40));
-            displayPanel.add(dispensePanel);
+                noRCMCard.add(Box.createHorizontalGlue());
+                JLabel noRCMLabel = new JLabel("No RCM to Simulate");
+                pleaseAuthenticateLabel.setForeground(Color.RED);
+                noRCMCard.add(pleaseAuthenticateLabel, BorderLayout.CENTER);
+                noRCMCard.add(Box.createHorizontalGlue());
 
-            displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
+            cardPanel.add(noRCMCard,noRCMCardString);
 
-        add(displayPanel);
+            // Set up card for primary functionality.
+            simCard = new JPanel();
+            simCard.setBackground(color);
+            simCard.setLayout(new BoxLayout(simCard, BoxLayout.X_AXIS));
 
-        add(Box.createHorizontalStrut(10));
+            simCard.add(Box.createHorizontalStrut(10));
 
-        buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-        buttonsPanel.setBackground(Color.DARK_GRAY);
-        // Add buttons.
-        add(buttonsPanel);
+                displayPanel = new JPanel();
+                displayPanel.setBackground(Color.GRAY);
+                displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
 
-        add(Box.createHorizontalStrut(10));
+                    displayPanel.add(Box.createVerticalStrut(75));
+
+                    textArea = new JTextArea();
+                    textArea.setEditable(false);
+                    displayPanel.add(textArea);
+
+                    displayPanel.add(Box.createVerticalStrut(75));
+
+                    dispensePanel = new JPanel();
+                    dispensePanel.setBackground(Color.BLACK);
+                    dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
+                    dispensePanel.add(Box.createVerticalStrut(40));
+                    displayPanel.add(dispensePanel);
+
+                    displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
+
+            simCard.add(displayPanel);
+
+            simCard.add(Box.createHorizontalStrut(10));
+
+                getPaidButton = new JButton("Get Paid");
+                // Steup what button does here.
+
+                buttonsPanel = new JPanel();
+                buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+                buttonsPanel.setBackground(Color.DARK_GRAY);
+            // Add buttons.
+            simCard.add(buttonsPanel);
+
+            simCard.add(Box.createHorizontalStrut(10));
+        cardPanel.add(simCard, simulationCardString);
+
+        if (RCM == null)
+            cards.show(cardPanel, noRCMCardString);
+        else
+            cards.show(cardPanel, simulationCardString);
+
+        add(cardPanel, BorderLayout.CENTER);
     }
 
     public RCMPanel(Color color, RecyclingMachine RCM) {
@@ -114,7 +166,7 @@ public class RCMPanel extends JPanel implements ActionListener {
         for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
             String name = entry.getKey();
             double price = entry.getValue();
-            JButton button = new JButton(name+": "+price+"/lb");
+            JButton button = new JButton(name+": $"+price+"/lb");
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -131,6 +183,9 @@ public class RCMPanel extends JPanel implements ActionListener {
             buttonsPanel.add(button);
 //            buttonsPanel.add(Box.createRigidArea(new Dimension(0,10)));
         }
+
+        buttonsPanel.add(Box.createVerticalStrut(20));
+        buttonsPanel.add(getPaidButton);
     }
 
     /* Action Listener Methods */
