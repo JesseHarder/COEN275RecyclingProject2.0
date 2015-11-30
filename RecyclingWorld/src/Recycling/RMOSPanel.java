@@ -194,8 +194,7 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Add machine button logic here.
-                        JOptionPane.showMessageDialog( null,
-                                "Not implemented yet.");
+
                     }
                 });
 
@@ -266,7 +265,6 @@ public class RMOSPanel extends JPanel {
         for (RecyclingMachine RCM:RMOS.getMachines()) {
             rcmListModel.addElement(RCM.getID());
         }
-
         rcmJList.setModel(rcmListModel);
         rcmJList.setSelectedIndex(0);
     }
