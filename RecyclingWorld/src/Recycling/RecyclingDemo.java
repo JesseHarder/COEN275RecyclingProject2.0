@@ -25,16 +25,14 @@ public class RecyclingDemo {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setPreferredSize(new Dimension(1200,600));
 
+        rcmPanel = new RCMPanel();
+        // Set up the RCMPanel.
+
         rmosPanel= new RMOSPanel();
+        rmosPanel.setRCMPanel(rcmPanel);
         // Set up the RMOSPanel.
 
-        // For testing.
-        RecyclingMachine testRCM = new RecyclingMachine();
-        testRCM.testPrep();
 
-        rcmPanel = new RCMPanel();
-        rcmPanel.setRCM(testRCM);
-        // Set up the RCMPanel.
 
         Container contentPane = mainFrame.getContentPane();
 

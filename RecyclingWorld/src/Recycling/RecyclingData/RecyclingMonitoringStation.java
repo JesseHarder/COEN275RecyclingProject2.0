@@ -49,12 +49,13 @@ public class RecyclingMonitoringStation {
     /* Machine Manipulation */
 
     public String newID() {
-        boolean used = false;
+        boolean used = true;
         String ID;
+        Random rand = new Random();
 
         do {
-            Random rand = new Random();
-            int val = rand.nextInt();
+            used = false;
+            int val = rand.nextInt(Integer.MAX_VALUE);
             ID = String.valueOf(val);
 
             // Check that ID is not currently used.
@@ -64,7 +65,7 @@ public class RecyclingMonitoringStation {
                     break;
                 }
             }
-        } while (!used); // Keep trying until new ID is obtained.
+        } while (used); // Keep trying until new ID is obtained.
 
         return ID;
     }
@@ -73,6 +74,31 @@ public class RecyclingMonitoringStation {
     public void addMachine() {
         RecyclingMachine RCM = new RecyclingMachine();
         RCM.setID(newID());
+        machines.add(RCM);
+    }
+
+    // Removes the first machine with the given ID, if found, from the list.
+    // Returns boolean representing whether or not a machine was removed.
+    public boolean removeMachineWithID(String ID) {
+        for (int i = 0; i < machines.size(); i++) {
+            RecyclingMachine RCM = machines.get(i);
+            if (ID.equals(RCM.getID())) {
+                machines.remove(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Removes the machine with the given index from the list if index is in bounds.
+    // Returns boolean representing whether or not a machine was removed.
+    public boolean removeMachineAtIndex(int index) {
+        if (index < machines.size()) {
+            machines.remove(index);
+            return true;
+        }
+        return false;
     }
 
     /* Status Saving and Loading */
@@ -159,5 +185,21 @@ public class RecyclingMonitoringStation {
         return str;
     }
 
+    /* For Testing with this RMOS */
+    public void testPrep() {
+
+        addMachine();
+        addMachine();
+        addMachine();
+
+        for (Integer i = 0; i < machines.size(); i++) {
+            RecyclingMachine RCM = machines.get(i);
+            RCM.setLocation("Location "+i);
+        }
+
+        setPrice("Wood", 5.0);
+        setPrice("Metal", 10.0);
+        setPrice("Junk", 1.0);
+    }
 
 }
