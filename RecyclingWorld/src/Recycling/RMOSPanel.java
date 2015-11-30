@@ -22,7 +22,8 @@ public class RMOSPanel extends JPanel {
     /* Public constants */
     public static final String authenticationCardString = "Authentication Card";
     public static final String controlCardString = "Control Card";
-    public static final String loginButtonPressedString= "Login Button Pressed";
+    public static final String loginButtonPressedString = "Login Button Pressed";
+    public static final String logoutButtonPressedString = "Logout Button Pressed";
 
     /* Interface Elements */
     CardLayout cards;
@@ -42,7 +43,7 @@ public class RMOSPanel extends JPanel {
             DefaultListModel<String> rcmListModel;
             JList rcmList;
         JPanel buttonPanel;
-            JButton b1;
+            JButton logoutButton;
 
     /* Getters and Setters */
     public RecyclingMonitoringStation getRMOS() {
@@ -146,8 +147,6 @@ public class RMOSPanel extends JPanel {
 
         controlCard.setLayout(new BoxLayout(controlCard, BoxLayout.Y_AXIS));
 
-            controlCard.add(Box.createVerticalStrut(50));
-
             centerPanel = new JPanel();
             centerPanel.setBackground(color);
             centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
@@ -170,17 +169,22 @@ public class RMOSPanel extends JPanel {
                 });
                 centerPanel.add(rcmList);
 
-                centerPanel.add(Box.createHorizontalStrut(20));
-
             controlCard.add(centerPanel);
-
-            controlCard.add(Box.createVerticalStrut(50));
 
             buttonPanel = new JPanel();
             buttonPanel.setBackground(Color.DARK_GRAY);
             buttonPanel.setLayout(new FlowLayout());
-                b1 = new JButton("Button 1");
-                buttonPanel.add(b1);
+                logoutButton = new JButton("Logout");
+                logoutButton.setActionCommand(logoutButtonPressedString);
+                logoutButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        loggedIn = false;
+                        cards.show(cardPanel, authenticationCardString);
+                        updateRCMPanel();
+                    }
+                });
+                buttonPanel.add(logoutButton);
             controlCard.add(buttonPanel);
 
         cardPanel.add(authenticationCard, authenticationCardString);
