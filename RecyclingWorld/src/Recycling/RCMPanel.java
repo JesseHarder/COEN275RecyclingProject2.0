@@ -114,7 +114,7 @@ public class RCMPanel extends JPanel implements ActionListener {
         for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
             String name = entry.getKey();
             double price = entry.getValue();
-            JButton button = new JButton(name+": "+price+"/lb");
+            JButton button = new JButton(name+": $"+price+"/lb");
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
