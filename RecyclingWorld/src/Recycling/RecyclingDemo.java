@@ -32,8 +32,6 @@ public class RecyclingDemo {
         rmosPanel.setRCMPanel(rcmPanel);
         // Set up the RMOSPanel.
 
-
-
         Container contentPane = mainFrame.getContentPane();
 
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
