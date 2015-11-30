@@ -200,6 +200,9 @@ public class RecyclingMonitoringStation {
         setPrice("Wood", 5.0);
         setPrice("Metal", 10.0);
         setPrice("Junk", 1.0);
+
+        userPaswordMap.put("","");
+        userPaswordMap.put("test","test");
     }
 
 }
