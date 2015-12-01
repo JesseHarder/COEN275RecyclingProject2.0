@@ -288,21 +288,8 @@ public class RecyclingMachine {
 
     /* Helper Functions */
 
-        /* Double formatting helper function */
-    public static String formatDoubleAmount(double amount, int sigFigs) {
-        String formatString = "0";
-        if (sigFigs > 0) {
-            formatString = formatString + ".";
-            for (int i = 0; i < sigFigs; i++)
-                formatString = formatString + "0";
-        }
-        DecimalFormat myFormat = new DecimalFormat(formatString);
-        String myDoubleString = myFormat.format(amount);
-        return myDoubleString;
-    }
-
     public static String formatMoneyAmount(double amount) {
-        return formatDoubleAmount(amount, 2);
+        return RecHelper.formatDoubleAmount(amount, 2);
     }
 
         /* Metric Unit Conversion Stuff */
@@ -311,7 +298,7 @@ public class RecyclingMachine {
         return kilogramsPerPound * lbs;
     }
 
-    public double convertPriceToPricePerKilogram(double price) {
+    public static double convertPriceToPricePerKilogram(double price) {
         return price / kilogramsPerPound;
     }
 }
