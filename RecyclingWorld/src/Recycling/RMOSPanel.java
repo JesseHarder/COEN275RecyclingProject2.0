@@ -13,6 +13,14 @@ import java.awt.event.ActionListener;
 /**
  * Created by JHarder on 11/28/15.
  */
+class labeledTextField extends JPanel {
+    JLabel label;
+    JTextField textField;
+
+    public JLabel getLabel() {return label;}
+    public JTextField getTextField() {return textField;}
+}
+
 public class RMOSPanel extends JPanel {
     /* Data */
     private boolean loggedIn;
@@ -191,17 +199,17 @@ public class RMOSPanel extends JPanel {
 
                     pricesCard = new JPanel();
                     pricesCard.setBackground(Color.BLUE);
-
+                    // Add prices card stuff here.
                     displayPanel.add(pricesCard, pricesCardString);
 
                     machineStatsCard = new JPanel();
                     machineStatsCard.setBackground(Color.RED);
-
+                    // Add machine card stuff here.
                     displayPanel.add(machineStatsCard, machineStatCardString);
 
                     globalStatsCard = new JPanel();
                     globalStatsCard.setBackground(Color.GREEN);
-
+                    // Add global stats stuff here.
                     displayPanel.add(globalStatsCard, globalStatCardString);
 
                 displayCards.show(displayPanel,globalStatCardString);
