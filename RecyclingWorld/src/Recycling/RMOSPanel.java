@@ -62,6 +62,11 @@ public class RMOSPanel extends JPanel {
                 JPanel itemCard;
                 JPanel machineStatsCard;
                 JPanel globalStatsCard;
+                    JLabel mostUsedByWeight;
+                    JLabel mostUsedByPayout;
+                    JLabel leastUsedByWeight;
+                    JLabel leastUsedByPayout;
+                    JLabel mostRecycledItemStat;
             DefaultListModel<String> rcmListModel;
             JScrollPane rcmJListScroll;
             JList rcmJList;

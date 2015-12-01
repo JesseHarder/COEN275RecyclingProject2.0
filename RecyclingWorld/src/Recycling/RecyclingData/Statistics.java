@@ -125,8 +125,65 @@ public class Statistics{
             return total_money;
         }
 
+        public static String mostUsedByWeight() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(item_weight) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL DESC LIMIT 1";
+            ResultSet rs = query(sql,"Finding machine with most recycled by weight.");
+            String total = rs.getString("ID");
+            return total;
+        }
+
+        public static double highestWeight() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(item_weight) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL DESC LIMIT 1";
+            ResultSet rs = query(sql, "Finding machine with most recycled by weight.");
+            double total = rs.getDouble("TOTAL");
+            return total;
+        }
+
+        public static String mostUsedByPayout() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(money) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL DESC LIMIT 1";
+            ResultSet rs = query(sql,"Finding machine with most recycled by weight.");
+            String total = rs.getString("ID");
+            return total;
+        }
+
+        public static double highestPayout() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(money) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL DESC LIMIT 1";
+            ResultSet rs = query(sql, "Finding machine with most recycled by weight.");
+            double total = rs.getDouble("TOTAL");
+            return total;
+    }
+
+        public static String leastUsedByWeight() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(item_weight) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL ASC LIMIT 1";
+            ResultSet rs = query(sql,"Finding machine with most recycled by weight.");
+            String total = rs.getString("ID");
+            return total;
+        }
+
+        public static double lowestWeight() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(item_weight) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL ASC LIMIT 1";
+            ResultSet rs = query(sql, "Finding machine with most recycled by weight.");
+            double total = rs.getDouble("TOTAL");
+            return total;
+        }
+
+        public static String leastUsedByPayout() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(money) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL ASC LIMIT 1";
+            ResultSet rs = query(sql,"Finding machine with most recycled by weight.");
+            String total = rs.getString("ID");
+            return total;
+        }
+
+        public static double lowestPayout() throws SQLException, ClassNotFoundException {
+            String sql = "SELECT DISTINCT SUM(money) AS TOTAL,ID FROM TRANSACTIONS ORDER BY TOTAL ASC LIMIT 1";
+            ResultSet rs = query(sql, "Finding machine with most recycled by weight.");
+            double total = rs.getDouble("TOTAL");
+            return total;
+        }
+
+
+
 
 
 
 }
-
