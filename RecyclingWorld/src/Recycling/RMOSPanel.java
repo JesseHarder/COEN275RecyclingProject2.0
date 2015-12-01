@@ -17,6 +17,18 @@ class labeledTextField extends JPanel {
     JLabel label;
     JTextField textField;
 
+    public labeledTextField() {
+        this ("Default", 10);
+    }
+
+    public labeledTextField(String labelText, int fieldWidth) {
+        setLayout(new FlowLayout());
+        label = new JLabel(labelText);
+        add(label);
+        textField = new JTextField(fieldWidth);
+        add(textField);
+    }
+
     public JLabel getLabel() {return label;}
     public JTextField getTextField() {return textField;}
 }
@@ -198,8 +210,33 @@ public class RMOSPanel extends JPanel {
                 displayPanel.setLayout(displayCards);
 
                     pricesCard = new JPanel();
-                    pricesCard.setBackground(Color.BLUE);
-                    // Add prices card stuff here.
+                    pricesCard.setBackground(lightBlueColor);
+
+                        JPanel leftPanel = new JPanel();
+                        leftPanel.setBackground(lightBlueColor);
+                        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+                            labeledTextField nameField = new labeledTextField("Item Name:",10);
+                            leftPanel.add(nameField);
+
+                            labeledTextField priceField = new labeledTextField("Price:",10);
+                            leftPanel.add(priceField);
+
+                            JButton priceAddButton = new JButton();
+                            priceAddButton.setActionCommand("Price Add Button Pressed");
+                            priceAddButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    String name = nameField.getTextField().getText();
+//                                    String price =
+                                }
+                            });
+                            leftPanel.add(priceAddButton);
+
+
+                        JPanel rightPanel = new JPanel();
+                        rightPanel.setBackground(lightBlueColor);
+
                     displayPanel.add(pricesCard, pricesCardString);
 
                     machineStatsCard = new JPanel();
