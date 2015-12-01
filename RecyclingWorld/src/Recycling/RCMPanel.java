@@ -27,6 +27,7 @@ public class RCMPanel extends JPanel {
         JPanel simCard;
             JPanel displayPanel;
             JPanel dispensePanel;
+                JLabel dispenserErrorMessage;
             JTextArea textArea;
 
             JPanel buttonsPanel;
@@ -111,7 +112,10 @@ public class RCMPanel extends JPanel {
                     dispensePanel = new JPanel();
                     dispensePanel.setBackground(Color.BLACK);
                     dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
-                    dispensePanel.add(Box.createVerticalStrut(40));
+                    dispensePanel.add(Box.createVerticalStrut(20));
+                        dispenserErrorMessage = new JLabel("Can't Deposit"); // Initially hidden.
+                    dispensePanel.add(dispenserErrorMessage);
+                    dispensePanel.add(Box.createVerticalStrut(20));
                     displayPanel.add(dispensePanel);
 
                     displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
@@ -133,16 +137,7 @@ public class RCMPanel extends JPanel {
                         String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
                         textArea.setText(message);
 
-                        screenNeedsUpdating = true;
-                        Timer timer = new Timer(5000, new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if (screenNeedsUpdating) {
-                                    updateRCMDisplay();
-                                }
-                            }
-                        });
-                        timer.start();
+                        scheduleScreenRefresh(5000);
                     }
                 });
 
@@ -173,9 +168,23 @@ public class RCMPanel extends JPanel {
     public void updateRCMDisplay() {
         updateTextArea();
         updateButtons();
+        updateDispensePanel();
 
         validate();
         repaint();
+    }
+
+    public void scheduleScreenRefresh(int miliseconds) {
+        screenNeedsUpdating = true;
+        Timer timer = new Timer(miliseconds, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (screenNeedsUpdating) {
+                    updateRCMDisplay();
+                }
+            }
+        });
+        timer.start();
     }
 
     public void updateTextArea() {
@@ -212,9 +221,9 @@ public class RCMPanel extends JPanel {
                             Statistics.logTransaction(id,name,weight,price);
                             updateTextArea();
                         } else {
-                            // Tell user there wasn't room for deposit.
-                            JOptionPane.showMessageDialog( null,
-                                    "Not enough room to deposit "+weight+" pounds of "+name+".\nStill need to implement.");
+                            dispensePanel.setBackground(Color.RED);
+                            dispenserErrorMessage.setText("Not Enough Room");
+                            scheduleScreenRefresh(3000);
                         }
                     }
                 });
@@ -227,5 +236,10 @@ public class RCMPanel extends JPanel {
 
             buttonsPanel.add(getPaidButton);
         }
+    }
+
+    public void updateDispensePanel() {
+        dispensePanel.setBackground(Color.black);
+        dispenserErrorMessage.setText("");
     }
 }
