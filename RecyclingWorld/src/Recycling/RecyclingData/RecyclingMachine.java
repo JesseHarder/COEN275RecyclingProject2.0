@@ -190,6 +190,7 @@ public class RecyclingMachine {
             writer.println(ID);
             writer.println(location);
             writer.println(moneyManager.getCashReserves());
+            writer.println(session.getMoneyOwed());
 
             for (Map.Entry entry:itemContainer.getContents().entrySet()) {
                 writer.println(entry.getKey() + "," + entry.getValue());
@@ -208,6 +209,8 @@ public class RecyclingMachine {
             location = sc.nextLine();
             double cash = sc.nextDouble();
             moneyManager.setCashReserves(cash);
+            double owed = sc.nextDouble();
+            session.setMoneyOwed(owed);
             while (sc.hasNext())
             {
                 String itemString = sc.next();
@@ -229,6 +232,7 @@ public class RecyclingMachine {
         val = val + "ID: " + ID + "\n";
         val = val + "Location: " + location + "\n";
         val = val + moneyManager + "\n";
+        val = val + "Ammount owed for session: " + session.getMoneyOwed() + "\n";
 
         val = val + "Prices:\n";
         for (Map.Entry<String,Double> entry:priceList.entrySet()) {
