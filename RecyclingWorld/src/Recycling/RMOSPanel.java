@@ -38,6 +38,7 @@ class labeledTextField extends JPanel {
 
 public class RMOSPanel extends JPanel {
 
+    /* Price Editing Panel Class */
     class PriceEditingPanel extends JPanel {
         public static final String setPriceErrorString = "Price must be real number.";
 
@@ -54,7 +55,7 @@ public class RMOSPanel extends JPanel {
 
         public PriceEditingPanel (Color color) {
             setBackground(color);
-            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
             upperPricePanel = new JPanel();
             upperPricePanel.setBackground(getBackground());
@@ -99,9 +100,10 @@ public class RMOSPanel extends JPanel {
             add(Box.createHorizontalStrut(5));
 
             lowerPricePanel = new JPanel();
-            lowerPricePanel.setBackground(color);
-            // Add stuff to right panel.
-            add(upperPricePanel);
+            lowerPricePanel.setBackground(Color.GREEN);
+            lowerPricePanel.setLayout(new FlowLayout());
+
+            add(lowerPricePanel);
         }
     }
 
