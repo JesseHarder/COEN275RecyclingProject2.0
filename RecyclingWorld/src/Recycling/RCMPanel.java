@@ -1,5 +1,6 @@
 package Recycling;
 
+import Recycling.RecyclingData.RecHelper;
 import Recycling.RecyclingData.RecyclingMachine;
 import Recycling.RecyclingData.Statistics;
 
@@ -243,7 +244,7 @@ public class RCMPanel extends JPanel {
                             weightUnit = "kgs";
                             weight = RCM.kilogramsForPounds(weight);
                         }
-                        message += "\n"+RCM.formatDoubleAmount(weight,2)+" "+weightUnit+"of " + item + ": $" + RCM.formatMoneyAmount(cash);
+                        message += "\n"+ RecHelper.formatDoubleAmount(weight,2)+" "+weightUnit+"of " + item + ": $" + RCM.formatMoneyAmount(cash);
                     }
                 }
                 message += "\nTotal owed: $" + RCM.formatMoneyAmount(RCM.amountOwedForSession());
