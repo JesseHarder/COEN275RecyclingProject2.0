@@ -214,7 +214,6 @@ public class RMOSPanel extends JPanel {
                             RecyclingMachine RCM = selectedRCM();
                             RMOS.removeMachineWithID(RCM.getID());
                             updateRCMList();
-                            rcmJList.setModel(rcmListModel);
 //
 //                            updateButtonPanel();
 //                            updateRCMPanel();
