@@ -206,10 +206,16 @@ public class RMOSPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Remove machine button logic here.
-                        JOptionPane.showMessageDialog( null,
-                                "Not implemented yet.");
+                        if (!RMOS.getMachines().isEmpty()) {
+                            RecyclingMachine RCM = selectedRCM();
+                            RMOS.removeMachineWithID(RCM.getID());
+                            updateRCMList();
+                            rcmJList.setModel(rcmListModel);
+//
+//                            updateButtonPanel();
+//                            updateRCMPanel();
                     }
-                });
+                }});
 
                 // Setup activate button
                 activateDeactivateButton = new JButton(activateString);
