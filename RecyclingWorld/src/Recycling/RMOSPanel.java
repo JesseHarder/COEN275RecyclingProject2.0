@@ -432,6 +432,13 @@ public class RMOSPanel extends JPanel {
                 showGlobalStatsButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        try {
+                            updateGlobalStats();
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        } catch (ClassNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
                         displayCards.show(displayPanel, globalStatCardString);
                     }
                 });
