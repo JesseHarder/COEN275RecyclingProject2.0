@@ -45,18 +45,28 @@ public class ItemContainer {
         return total;
     }
 
+    public double getRemainingSpace() {return getWeightCapacity() - getContentsWeight();}
+
     /* Adding and items and emptying*/
 
-        // Adds item with "name" to holder with amount "weight".
-    public void depositItem(String name, double weight) {
-        if (!contents.containsKey(name)) {
-            contents.put(name, weight);
+        // Adds item with "name" to holder with amount "weight" if holder has remaining space.
+        // Returns boolean for whether or not there was space.
+    public boolean depositItem(String name, double weight) {
+        if (weight < getRemainingSpace()) {
+            if (!contents.containsKey(name)) {
+                contents.put(name, weight);
+            }
+            else {
+                double w = contents.get(name);
+                w += weight;
+                contents.put(name, w);
+            }
+
+            return true;
+        } else {
+            return false;
         }
-        else {
-            double w = contents.get(name);
-            w += weight;
-            contents.put(name, w);
-        }
+
     }
         // Adds amount of item to holder represented by the given "item".
     public void depositItem(RecyclableItem item) {

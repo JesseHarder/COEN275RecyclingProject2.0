@@ -1,6 +1,7 @@
 package Recycling.RecyclingData;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -111,9 +112,11 @@ public class RecyclingMachine {
     /* Item Container Manipulation */
 
     public double getContentsWeight() {return itemContainer.getContentsWeight();}
-    public void depositItem(String name, double weight) {
-        itemContainer.depositItem(name,weight);
-        session.addMoneyOwed(priceForAmountOfItem(name,weight));
+    // Returns boolean for whether or not there was room to deposit.
+    public boolean depositItem(String name, double weight) {
+        boolean hasRoom = itemContainer.depositItem(name,weight);
+        if (hasRoom) session.addMoneyOwed(priceForAmountOfItem(name,weight));
+        return hasRoom;
     }
     public void empty() {
         Statistics.logEmpty(this.getID());
@@ -242,6 +245,13 @@ public class RecyclingMachine {
         val = val + "Contents: \n" + itemContainer;
 
         return val;
+    }
+
+    /* Double formatting helper function */
+    public static String formatMoneyAmount(double amount) {
+        DecimalFormat myFormat = new DecimalFormat("0.00");
+        String myDoubleString = myFormat.format(amount);
+        return myDoubleString;
     }
 
     /* Setting up a state for testing other things with this RCM */

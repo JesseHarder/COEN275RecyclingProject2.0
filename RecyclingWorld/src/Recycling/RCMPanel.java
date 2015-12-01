@@ -8,13 +8,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by JHarder on 11/28/15.
  */
 public class RCMPanel extends JPanel {
     private RecyclingMachine RCM;
+
+
+    private boolean screenNeedsUpdating; // Used to tell if timer updates should do things.
 
     /* Interface elements */
 
@@ -35,6 +37,7 @@ public class RCMPanel extends JPanel {
     public static final String noRCMCardString = "No RCM Card";
     public static final String simulationCardString = "Simulation Card";
     public static final String depositButtonPressedString = "Deposit Button Pressed";
+    public static final String getPaidButtonPressedString = "Get Paid Button Pressed";
 
     /* Getters and Setters */
     public RecyclingMachine getRCM() {return RCM;}
@@ -50,6 +53,8 @@ public class RCMPanel extends JPanel {
     }
 
     public RCMPanel(Color color) {
+        screenNeedsUpdating = false;
+
         // Start by setting up cards at top level.
         setBackground(color);
         setLayout(new BorderLayout());
@@ -116,7 +121,30 @@ public class RCMPanel extends JPanel {
             simCard.add(Box.createHorizontalStrut(10));
 
                 getPaidButton = new JButton("Get Paid");
-                // Steup what button does here.
+                getPaidButton.setActionCommand(getPaidButtonPressedString);
+                getPaidButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String paymentType;
+                        if (RCM.canWithdrawCashForSession()) paymentType = " as cash";
+                        else paymentType = " in coupons";
+
+                        double amount = RCM.withdrawCashForSession();
+                        String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
+                        textArea.setText(message);
+
+                        screenNeedsUpdating = true;
+                        Timer timer = new Timer(5000, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (screenNeedsUpdating) {
+                                    updateRCMDisplay();
+                                }
+                            }
+                        });
+                        timer.start();
+                    }
+                });
 
                 buttonsPanel = new JPanel();
                 buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
@@ -156,13 +184,13 @@ public class RCMPanel extends JPanel {
                 textArea.setText("RCM "+RCM.getID()+" is INACTIVE");
             else {
                 String message = "RCM "+RCM.getID()+" is ACTIVE";
-                message = message + "\nAmount owed: $" + RCM.amountOwedForSession();
-
+                message = message + "\nAmount owed: $" + RCM.formatMoneyAmount(RCM.amountOwedForSession());
 
                 textArea.setText(message);
             }
-
         }
+
+        screenNeedsUpdating = false;
     }
 
     // To be called when the RCM's item list changes.
@@ -179,11 +207,15 @@ public class RCMPanel extends JPanel {
                         String id = RCM.getID();
                         double price = RCM.getPriceList().get(name);
                         double weight = Math.random() * 10; // Eventually randomize this.
-                        Statistics.logTransaction(id,name,weight,price);
-                        RCM.depositItem(name,weight);
-//                        JOptionPane.showMessageDialog( null,
-//                                "Depositing "+weight+" pounds of "+name+".");
-                        updateTextArea();
+                        boolean hadRoomForDeposit = RCM.depositItem(name,weight);
+                        if (hadRoomForDeposit) {
+                            Statistics.logTransaction(id,name,weight,price);
+                            updateTextArea();
+                        } else {
+                            // Tell user there wasn't room for deposit.
+                            JOptionPane.showMessageDialog( null,
+                                    "Not enough room to deposit "+weight+" pounds of "+name+".\nStill need to implement.");
+                        }
                     }
                 });
                 button.setActionCommand(depositButtonPressedString);
