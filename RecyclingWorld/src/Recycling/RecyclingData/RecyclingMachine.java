@@ -47,6 +47,8 @@ public class RecyclingMachine {
     private HashMap<String, Double> priceList;
     private Session session;
 
+    public static final double kilogramsPerPound = 0.453592;
+
     /* Constructors */
     public RecyclingMachine () {
         // Using below constructor in default constructor.
@@ -272,7 +274,21 @@ public class RecyclingMachine {
         return val;
     }
 
-    /* Double formatting helper function */
+    /* Setting up a state for testing other things with this RCM */
+    public void testPrep() {
+        setPrice("Stuff", 5.0);
+        setPrice("Things",2.5);
+        setPrice("Goodies",7.5);
+
+        depositItem("Stuff",3.0);
+        depositItem("Things",5.0);
+
+        setCashReserves(100.0);
+    }
+
+    /* Helper Functions */
+
+        /* Double formatting helper function */
     public static String formatDoubleAmount(double amount, int sigFigs) {
         String formatString = "0";
         if (sigFigs > 0) {
@@ -289,15 +305,13 @@ public class RecyclingMachine {
         return formatDoubleAmount(amount, 2);
     }
 
-    /* Setting up a state for testing other things with this RCM */
-    public void testPrep() {
-        setPrice("Stuff", 5.0);
-        setPrice("Things",2.5);
-        setPrice("Goodies",7.5);
+        /* Metric Unit Conversion Stuff */
+    // Returns killograms for given number of pounds.
+    public static double kilogramsForPounds(double lbs) {
+        return kilogramsPerPound * lbs;
+    }
 
-        depositItem("Stuff",3.0);
-        depositItem("Things",5.0);
-
-        setCashReserves(100.0);
+    public double convertPriceToPricePerKilogram(double price) {
+        return price / kilogramsPerPound;
     }
 }

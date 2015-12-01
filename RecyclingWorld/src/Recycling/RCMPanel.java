@@ -144,13 +144,13 @@ public class RCMPanel extends JPanel {
                     }
                 });
 
-                metricButton = new JButton("Get Paid");
+                metricButton = new JButton("Metric");
                 metricButton.setActionCommand(metricButtonPressedString);
                 metricButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         inMetric = !inMetric;
-                        
+                        metricButton.setText((inMetric) ? "Imperial" : "Metric");
                         updateRCMDisplay();
                     }
                 });
@@ -217,8 +217,8 @@ public class RCMPanel extends JPanel {
                     {
                         double cash = RCM.priceForItemThisSession(item);
                         if (inMetric) {
-                            weightUnit = "metric units";
-                            //convert weight number to metric amount.
+                            weightUnit = "kgs";
+                            weight = RCM.kilogramsForPounds(weight);
                         }
                         message += "\n"+RCM.formatDoubleAmount(weight,2)+" "+weightUnit+"of " + item + ": $" + RCM.formatMoneyAmount(cash);
                     }
@@ -239,7 +239,14 @@ public class RCMPanel extends JPanel {
             for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
                 String name = entry.getKey();
                 double price = entry.getValue();
-                JButton button = new JButton(name+": $"+price+"/lb");
+                String weightUnit = "lb";
+
+                if (inMetric) {
+                    price = RCM.convertPriceToPricePerKilogram(price);
+                    weightUnit = "kg";
+                }
+
+                JButton button = new JButton(name+": $"+RCM.formatMoneyAmount(price)+"/"+weightUnit);
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -265,6 +272,7 @@ public class RCMPanel extends JPanel {
             buttonsPanel.add(Box.createVerticalStrut(20));
 
             buttonsPanel.add(getPaidButton);
+            buttonsPanel.add(metricButton);
         }
     }
 
