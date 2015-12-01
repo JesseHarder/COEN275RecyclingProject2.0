@@ -320,7 +320,6 @@ public class RMOSPanel extends JPanel {
             activateDeactivateButton.setText(activateString);
         } else {
             int index = selectedRCMIndex();
-            System.out.println(index);
             RecyclingMachine RCM = RMOS.getMachines().get(index);
             // Choosing whether activate button reads "activate" or "deactivate".
             if (RCM.isActive())
