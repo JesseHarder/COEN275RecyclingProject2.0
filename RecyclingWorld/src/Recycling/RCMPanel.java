@@ -31,7 +31,8 @@ public class RCMPanel extends JPanel {
             JTextArea textArea;
 
             JPanel buttonsPanel;
-                JButton getPaidButton;
+                JButton getCashButton;
+                JButton getCouponsButton;
                 JButton metricButton;
 
     /* Public constants */
@@ -39,7 +40,8 @@ public class RCMPanel extends JPanel {
     public static final String noRCMCardString = "No RCM Card";
     public static final String simulationCardString = "Simulation Card";
     public static final String depositButtonPressedString = "Deposit Button Pressed";
-    public static final String getPaidButtonPressedString = "Get Paid Button Pressed";
+    public static final String getCashButtonPressedString = "Get Cash Button Pressed";
+    public static final String getCouponsButtonPressedString = "Get Coupons Button Pressed";
     public static final String metricButtonPressedString = "Metric Button Pressed";
 
     /* Getters and Setters */
@@ -66,7 +68,7 @@ public class RCMPanel extends JPanel {
         cardPanel = new JPanel();
         cardPanel.setLayout(cards);
 
-            // Set up card for requesting authentication.
+        /* Set up card for requesting authentication. */
 
             preAuthenticationCard = new JPanel();
             preAuthenticationCard.setBackground(Color.BLACK);
@@ -80,7 +82,7 @@ public class RCMPanel extends JPanel {
 
             cardPanel.add(preAuthenticationCard,preAuthenticationCardString);
 
-            // Set up No RCM Card.
+        /* Set up No RCM Card. */
             noRCMCard = new JPanel();
             noRCMCard.setBackground(Color.BLACK);
             noRCMCard.setLayout(new BoxLayout(noRCMCard,BoxLayout.X_AXIS));
@@ -93,7 +95,7 @@ public class RCMPanel extends JPanel {
 
             cardPanel.add(noRCMCard,noRCMCardString);
 
-            // Set up card for primary functionality.
+        /* Set up card for primary functionality. */
             simCard = new JPanel();
             simCard.setBackground(color);
             simCard.setLayout(new BoxLayout(simCard, BoxLayout.X_AXIS));
@@ -123,26 +125,44 @@ public class RCMPanel extends JPanel {
 
                     displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
 
+
             simCard.add(displayPanel);
 
             simCard.add(Box.createHorizontalStrut(10));
 
-                getPaidButton = new JButton("Get Paid");
-                getPaidButton.setActionCommand(getPaidButtonPressedString);
-                getPaidButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String paymentType;
-                        if (RCM.canWithdrawCashForSession()) paymentType = " as cash";
-                        else paymentType = " in coupons";
+                /* Start code for buttons */
 
-                        double amount = RCM.withdrawCashAndStartNewSession();
-                        String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
-                        textArea.setText(message);
+                getCashButton = new JButton("Get Cash");
+                getCashButton.setActionCommand(getCashButtonPressedString);
 
-                        scheduleScreenRefresh(5000);
-                    }
-                });
+                getCouponsButton = new JButton("Get Coupons");
+                getCouponsButton.setActionCommand(getCouponsButtonPressedString);
+
+                    ActionListener paymentActionListener = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String paymentType;
+                            double amount;
+                            // If not enough cash or user requested coupons.
+                            if (!RCM.canWithdrawCashForSession()
+                                    || e.getActionCommand().equals(getCouponsButtonPressedString)) {
+                                paymentType = " in coupons";
+                                amount = RCM.amountOwedForSession();
+                                RCM.startNewSession();
+                            } else {
+                                paymentType = "as cash";
+                                amount = RCM.withdrawCashAndStartNewSession();
+                            }
+
+                            String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
+                            textArea.setText(message);
+
+                            scheduleScreenRefresh(5000);
+                        }
+                    };
+
+                getCashButton.addActionListener(paymentActionListener);
+                getCouponsButton.addActionListener(paymentActionListener);
 
                 metricButton = new JButton("Metric");
                 metricButton.setActionCommand(metricButtonPressedString);
@@ -271,7 +291,8 @@ public class RCMPanel extends JPanel {
 
             buttonsPanel.add(Box.createVerticalStrut(20));
 
-            buttonsPanel.add(getPaidButton);
+            buttonsPanel.add(getCashButton);
+            buttonsPanel.add(getCouponsButton);
             buttonsPanel.add(metricButton);
         }
     }
