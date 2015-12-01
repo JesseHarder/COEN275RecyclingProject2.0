@@ -7,12 +7,34 @@ import java.util.*;
  * Created by JHarder on 11/11/15.
  */
 public class RecyclingMachine {
+    // Used to track individual uses of the machine between emptying.
+    class Session {
+        private double moneyOwed;
+
+        public Session(){
+            moneyOwed = 0;
+        }
+
+        public double getMoneyOwed(){
+            return moneyOwed;
+        }
+
+        public void setMoneyOwed(double amount){
+            moneyOwed = amount;
+        }
+
+        public void addMoneyOwed(double amount){
+            moneyOwed = moneyOwed + amount;
+        }
+    }
+
     private boolean active;
     private String ID;
     private String location;
     private MoneyManager moneyManager;
     private ItemContainer itemContainer;
     private HashMap<String, Double> priceList;
+    private Session session;
 
     /* Constructors */
     public RecyclingMachine () {
@@ -34,6 +56,7 @@ public class RecyclingMachine {
         moneyManager = new MoneyManager(moneyAmount);
         itemContainer = new ItemContainer(weightCapacity);
         priceList = new HashMap<String, Double>();
+        startNewSession();
     }
 
     /* Getters and Setters */
@@ -82,17 +105,28 @@ public class RecyclingMachine {
         this.priceList = priceList;
     }
 
+    /* Session management */
+    public void startNewSession() {session = new Session();}
+
     /* Item Container Manipulation */
 
     public double getContentsWeight() {return itemContainer.getContentsWeight();}
-    public void depositItem(String name, double weight) {itemContainer.depositItem(name,weight);}
-    public void empty() {Statistics.logEmpty(this.getID()); itemContainer.empty();}
+    public void depositItem(String name, double weight) {
+        itemContainer.depositItem(name,weight);
+        session.addMoneyOwed(priceForAmountOfItem(name,weight));
+    }
+    public void empty() {
+        Statistics.logEmpty(this.getID());
+        itemContainer.empty();
+        session = new Session();
+    }
 
     /* Price List Management */
 
         // Getting and Setting Prices
     public double getPrice(String name) {return priceList.get(name);}
     public void setPrice(String name, Double price) {priceList.put(name, price);}
+    public double priceForAmountOfItem(String name, double weight) {return getPrice(name) * weight;}
 
     /* Money Manipulation */
     public double getCashReserves() {
@@ -103,6 +137,30 @@ public class RecyclingMachine {
     }
     public void depositMoney(double amount) {
         moneyManager.deposit(amount);
+    }
+
+    /* Withdrawing money owed to user */
+
+    // Called to see if machine has the cash to provide for the amount
+    //      deposited in the current session.
+    // Used to determine if machine provides cash or coupons.
+    public boolean canWithdrawCashForSession() {
+        return session.getMoneyOwed() <= getCashReserves();
+    }
+
+    // Called to see what is owed for the current session.
+    public double amountOwedForSession () {return session.getMoneyOwed();}
+
+    // Called to potentially reduce cash reserves in machine and start a new session.
+    //      Also returns amount owed to user, because why not.
+    public double withdrawCashForSession() {
+        double amount = amountOwedForSession();
+
+        if (canWithdrawCashForSession()) moneyManager.withdraw(amount);
+
+        startNewSession();
+
+        return amount;
     }
 
     public double valueOfContents() {
@@ -132,6 +190,7 @@ public class RecyclingMachine {
             writer.println(ID);
             writer.println(location);
             writer.println(moneyManager.getCashReserves());
+            writer.println(session.getMoneyOwed());
 
             for (Map.Entry entry:itemContainer.getContents().entrySet()) {
                 writer.println(entry.getKey() + "," + entry.getValue());
@@ -150,6 +209,8 @@ public class RecyclingMachine {
             location = sc.nextLine();
             double cash = sc.nextDouble();
             moneyManager.setCashReserves(cash);
+            double owed = sc.nextDouble();
+            session.setMoneyOwed(owed);
             while (sc.hasNext())
             {
                 String itemString = sc.next();
@@ -171,6 +232,7 @@ public class RecyclingMachine {
         val = val + "ID: " + ID + "\n";
         val = val + "Location: " + location + "\n";
         val = val + moneyManager + "\n";
+        val = val + "Ammount owed for session: " + session.getMoneyOwed() + "\n";
 
         val = val + "Prices:\n";
         for (Map.Entry<String,Double> entry:priceList.entrySet()) {
