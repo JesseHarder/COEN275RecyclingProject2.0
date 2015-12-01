@@ -3,6 +3,7 @@ package Recycling;
 import Recycling.RecyclingData.RecHelper;
 import Recycling.RecyclingData.RecyclingMachine;
 import Recycling.RecyclingData.RecyclingMonitoringStation;
+import Recycling.RecyclingData.Statistics;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -10,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -155,7 +157,7 @@ public class RMOSPanel extends JPanel {
                     JLabel mostUsedByPayout;
                     JLabel leastUsedByWeight;
                     JLabel leastUsedByPayout;
-                    JLabel mostRecycledItemStat;
+                    JLabel mostRecycledItem;
             DefaultListModel<String> rcmListModel;
             JScrollPane rcmJListScroll;
             JList rcmJList;
@@ -188,11 +190,11 @@ public class RMOSPanel extends JPanel {
 
     /* Constructors */
 
-    public RMOSPanel () {
+    public RMOSPanel () throws SQLException, ClassNotFoundException {
         this (Color.LIGHT_GRAY);
     }
 
-    public RMOSPanel(Color color) {
+    public RMOSPanel(Color color) throws SQLException, ClassNotFoundException {
         // Data setup.
         loggedIn = false;
         updatingJList = false;
@@ -292,8 +294,22 @@ public class RMOSPanel extends JPanel {
                     displayPanel.add(machineStatsCard, machineStatCardString);
 
                     globalStatsCard = new JPanel();
+                    globalStatsCard.setLayout(new BoxLayout(globalStatsCard,BoxLayout.Y_AXIS));
                     globalStatsCard.setBackground(Color.GREEN);
                     // Add global stats stuff here.
+                        mostUsedByWeight = new JLabel();
+                        globalStatsCard.add(mostUsedByWeight);
+                        leastUsedByWeight = new JLabel();
+                        globalStatsCard.add(leastUsedByWeight);
+                        mostUsedByPayout = new JLabel();
+                        globalStatsCard.add(mostUsedByPayout);
+                        leastUsedByPayout = new JLabel();
+                        globalStatsCard.add(leastUsedByPayout);
+                        mostRecycledItem = new JLabel();
+                        globalStatsCard.add(mostRecycledItem);
+                        updateGlobalStats();
+
+
                     displayPanel.add(globalStatsCard, globalStatCardString);
 
                 displayCards.show(displayPanel,globalStatCardString);
@@ -531,4 +547,15 @@ public class RMOSPanel extends JPanel {
             }
         }
     }
+
+    public void updateGlobalStats() throws SQLException, ClassNotFoundException {
+        mostUsedByWeight.setText("Most Used Machine by Weight: "+ Statistics.mostUsedByWeight()+"("+Statistics.highestWeight()+")");
+        mostUsedByPayout.setText("Most Used Machine by Payout: "+ Statistics.mostUsedByPayout()+"($"+Statistics.highestPayout()+")");
+        leastUsedByWeight.setText("Least Used Machine by Weight: "+ Statistics.leastUsedByWeight()+"("+Statistics.lowestWeight()+")");
+        leastUsedByPayout.setText("Least Used Machine by Payout: "+ Statistics.leastUsedByPayout()+"($"+Statistics.lowestPayout()+")");
+        mostRecycledItem.setText("Most Recycled Item: "+ Statistics.mostRecycledItem());
+
+    }
+
+
 }
