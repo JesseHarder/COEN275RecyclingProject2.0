@@ -21,6 +21,8 @@ public class RMOSPanel extends JPanel {
     private RCMPanel rcmPanel;
 
     /* Public constants */
+    public static final String lightBlueColorString = "#b3e6ff";
+
     public static final String authenticationCardString = "Authentication Card";
     public static final String controlCardString = "Control Card";
     public static final String loginButtonPressedString = "Login Button Pressed";
@@ -166,7 +168,7 @@ public class RMOSPanel extends JPanel {
                 centerPanel.add(Box.createHorizontalStrut(20));
 
                 displayArea = new JPanel();
-                displayArea.setBackground(Color.WHITE);
+                displayArea.setBackground(Color.decode(lightBlueColorString));
                 centerPanel.add(displayArea);
 
                 centerPanel.add(Box.createHorizontalStrut(20));
@@ -283,6 +285,7 @@ public class RMOSPanel extends JPanel {
         }
 
         rcmJList.setModel(rcmListModel);
+        updatingJList = false;
         if (indexTemp < 0) {
             rcmJList.setSelectedIndex(0);
         } else if (indexTemp >= rcmJList.getModel().getSize()) {
@@ -290,8 +293,6 @@ public class RMOSPanel extends JPanel {
         } else {
             rcmJList.setSelectedIndex(indexTemp);
         }
-
-        updatingJList = false;
     }
 
     //Returns the index for the currently select RCM.

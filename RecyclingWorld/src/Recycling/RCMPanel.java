@@ -44,6 +44,8 @@ public class RCMPanel extends JPanel {
     public static final String getCouponsButtonPressedString = "Get Coupons Button Pressed";
     public static final String metricButtonPressedString = "Metric Button Pressed";
 
+    public static final String lightBlueColorString = "#b3e6ff";
+
     /* Getters and Setters */
     public RecyclingMachine getRCM() {return RCM;}
     public void setRCM(RecyclingMachine RCM) {
@@ -110,6 +112,7 @@ public class RCMPanel extends JPanel {
 
                     textArea = new JTextArea();
                     textArea.setEditable(false);
+                    textArea.setBackground(Color.decode("#b3e6ff"));
                     displayPanel.add(textArea);
 
                     displayPanel.add(Box.createVerticalStrut(75));
@@ -177,7 +180,7 @@ public class RCMPanel extends JPanel {
 
                 buttonsPanel = new JPanel();
                 buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-                buttonsPanel.setBackground(Color.DARK_GRAY);
+                buttonsPanel.setBackground(Color.decode(lightBlueColorString));
             // Add buttons.
             simCard.add(buttonsPanel);
 
