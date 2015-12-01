@@ -1,5 +1,6 @@
 package Recycling;
 
+import Recycling.RecyclingData.RecHelper;
 import Recycling.RecyclingData.RecyclingMachine;
 import Recycling.RecyclingData.RecyclingMonitoringStation;
 
@@ -62,6 +63,8 @@ public class RMOSPanel extends JPanel {
     public static final String showMachineStatsButtonPressedString = "Show Machine Stats Button Pressed";
     public static final String showGlobalStatsButtonPressedString = "Show Global Stats Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
+
+    public static final String addPriceErrorString = "Price must be real number.";
 
     /* Interface Elements */
     CardLayout cards;
@@ -216,16 +219,20 @@ public class RMOSPanel extends JPanel {
 
                     pricesCard = new JPanel();
                     pricesCard.setBackground(lightBlueColor);
+                    pricesCard.setLayout(new BoxLayout(pricesCard, BoxLayout.X_AXIS));
 
                         JPanel leftPanel = new JPanel();
                         leftPanel.setBackground(lightBlueColor);
                         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
                             labeledTextField nameField = new labeledTextField("Item Name:",10);
-                            leftPanel.add(nameField);
+
 
                             labeledTextField priceField = new labeledTextField("Price:",10);
-                            leftPanel.add(priceField);
+
+
+                            JLabel addPriceErrorLabel = new JLabel("");
+                            addPriceErrorLabel.setForeground(Color.RED);
 
                             JButton priceAddButton = new JButton();
                             priceAddButton.setActionCommand("Price Add Button Pressed");
@@ -233,14 +240,32 @@ public class RMOSPanel extends JPanel {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     String name = nameField.getTextField().getText();
-//                                    String price =
+                                    String priceString = priceField.getTextField().getText();
+
+                                    if (RecHelper.isDouble(priceString)) {
+                                        addPriceErrorLabel.setText("");
+                                        double price = Double.parseDouble(priceString);
+                                        RMOS.setPrice(name,price);
+                                        // Update JList.
+                                    } else {
+                                        addPriceErrorLabel.setText(addPriceErrorString);
+                                    }
                                 }
                             });
-                            leftPanel.add(priceAddButton);
 
+                            leftPanel.add(nameField);
+                            leftPanel.add(priceField);
+                            leftPanel.add(priceAddButton);
+                            leftPanel.add(addPriceErrorLabel);
+
+                        pricesCard.add(leftPanel);
+
+                        pricesCard.add(Box.createHorizontalStrut(5));
 
                         JPanel rightPanel = new JPanel();
                         rightPanel.setBackground(lightBlueColor);
+                            // Add stuff to right panel.
+                        pricesCard.add(leftPanel);
 
                     displayPanel.add(pricesCard, pricesCardString);
 
