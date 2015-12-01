@@ -65,11 +65,12 @@ public class RMOSPanel extends JPanel {
             DefaultListModel<String> rcmListModel;
             JScrollPane rcmJListScroll;
             JList rcmJList;
-        JPanel buttonPanel;
+        JPanel buttonPanel1;
             JButton addMachineButton;
             JButton removeMachineButton;
             JButton activateDeactivateButton;
             JButton emptyMachineButton;
+        JPanel buttonPanel2;
             JButton editPricesButton;
             JButton showMachineStatsButton;
             JButton showGlobalStatsButton;
@@ -226,9 +227,9 @@ public class RMOSPanel extends JPanel {
 
             controlCard.add(centerPanel);
 
-            buttonPanel = new JPanel();
-            buttonPanel.setBackground(Color.DARK_GRAY);
-            buttonPanel.setLayout(new FlowLayout());
+            buttonPanel1 = new JPanel();
+            buttonPanel1.setBackground(Color.DARK_GRAY);
+            buttonPanel1.setLayout(new FlowLayout());
 
                 // Setup add machine button
                 addMachineButton = new JButton("Add Machine");
@@ -291,6 +292,10 @@ public class RMOSPanel extends JPanel {
                     }
                 });
 
+            buttonPanel2 = new JPanel();
+            buttonPanel2.setBackground(Color.DARK_GRAY);
+            buttonPanel2.setLayout(new FlowLayout());
+
                 // Setup show stats button.
                 editPricesButton = new JButton("Edit Prices");
                 editPricesButton.setActionCommand(editPricesButtonPressedString);
@@ -334,7 +339,8 @@ public class RMOSPanel extends JPanel {
                 });
 
                 updateButtonPanel();
-            controlCard.add(buttonPanel);
+            controlCard.add(buttonPanel1);
+            controlCard.add(buttonPanel2);
 
         cardPanel.add(authenticationCard, authenticationCardString);
         cardPanel.add(controlCard, controlCardString);
@@ -402,15 +408,18 @@ public class RMOSPanel extends JPanel {
                 activateDeactivateButton.setText(activateString);
         }
 
-        buttonPanel.removeAll();
-        buttonPanel.add(addMachineButton);
-        if (!RMOSisEmpty) buttonPanel.add(removeMachineButton);
-        if (!RMOSisEmpty) buttonPanel.add(activateDeactivateButton);
-        if (!RMOSisEmpty) buttonPanel.add(emptyMachineButton);
-        buttonPanel.add(editPricesButton);
-        if (!RMOSisEmpty) buttonPanel.add(showMachineStatsButton);
-        buttonPanel.add(showGlobalStatsButton);
-        buttonPanel.add(logoutButton);
+        // Button Panel 1
+        buttonPanel1.removeAll();
+        buttonPanel1.add(addMachineButton);
+        if (!RMOSisEmpty) buttonPanel1.add(removeMachineButton);
+        if (!RMOSisEmpty) buttonPanel1.add(activateDeactivateButton);
+        if (!RMOSisEmpty) buttonPanel1.add(emptyMachineButton);
+
+        // Button Panel 2
+        buttonPanel2.add(editPricesButton);
+        if (!RMOSisEmpty) buttonPanel2.add(showMachineStatsButton);
+        buttonPanel2.add(showGlobalStatsButton);
+        buttonPanel2.add(logoutButton);
     }
 
     public void updateRCMPanel() {
