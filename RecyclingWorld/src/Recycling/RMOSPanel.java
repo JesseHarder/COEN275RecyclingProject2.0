@@ -28,7 +28,7 @@ public class RMOSPanel extends JPanel {
     public static final String controlCardString = "Control Card";
     public static final String loginButtonPressedString = "Login Button Pressed";
 
-    public static final String itemCardString = "Item Card";
+    public static final String pricesCardString = "Prices Card";
     public static final String machineStatCardString = "Machine Stat Card";
     public static final String globalStatCardString = "Global Stat Card";
 
@@ -38,7 +38,7 @@ public class RMOSPanel extends JPanel {
         public static final String activateString = "Activate";
         public static final String deactivateString = "Deactivate";
     public static final String emptyButtonPressedString = "Empty Button Pressed";
-    public static final String editMachineButtonPressedString = "Edit Machine Button Pressed";
+    public static final String editPricesButtonPressedString = "Edit Prices Button Pressed";
     public static final String showMachineStatsButtonPressedString = "Show Machine Stats Button Pressed";
     public static final String showGlobalStatsButtonPressedString = "Show Global Stats Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
@@ -59,7 +59,7 @@ public class RMOSPanel extends JPanel {
         JPanel centerPanel;
             CardLayout displayCards;
             JPanel displayPanel;
-                JPanel itemCard;
+                JPanel pricesCard;
                 JPanel machineStatsCard;
                 JPanel globalStatsCard;
             DefaultListModel<String> rcmListModel;
@@ -70,6 +70,7 @@ public class RMOSPanel extends JPanel {
             JButton removeMachineButton;
             JButton activateDeactivateButton;
             JButton emptyMachineButton;
+            JButton editPricesButton;
             JButton showMachineStatsButton;
             JButton showGlobalStatsButton;
             JButton logoutButton;
@@ -187,13 +188,13 @@ public class RMOSPanel extends JPanel {
                 displayPanel.setBackground(lightBlueColor);
                 displayPanel.setLayout(displayCards);
 
-                    itemCard = new JPanel();
-                    itemCard.setBackground(lightBlueColor);
+                    pricesCard = new JPanel();
+                    pricesCard.setBackground(Color.BLUE);
 
-                    displayPanel.add(itemCard, itemCardString);
+                    displayPanel.add(pricesCard, pricesCardString);
 
                     machineStatsCard = new JPanel();
-                    machineStatsCard.setBackground(lightBlueColor);
+                    machineStatsCard.setBackground(Color.RED);
 
                     displayPanel.add(machineStatsCard, machineStatCardString);
 
@@ -291,12 +292,22 @@ public class RMOSPanel extends JPanel {
                 });
 
                 // Setup show stats button.
+                editPricesButton = new JButton("Edit Prices");
+                editPricesButton.setActionCommand(editPricesButtonPressedString);
+                editPricesButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        displayCards.show(displayPanel, pricesCardString);
+                    }
+                });
+
+                // Setup show stats button.
                 showMachineStatsButton = new JButton("Show Machine Stats");
                 showMachineStatsButton.setActionCommand(showMachineStatsButtonPressedString);
                 showMachineStatsButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null, "Implement this.");
+                        displayCards.show(displayPanel, machineStatCardString);
                     }
                 });
 
@@ -306,7 +317,7 @@ public class RMOSPanel extends JPanel {
                 showGlobalStatsButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null, "Implement this.");
+                        displayCards.show(displayPanel, globalStatCardString);
                     }
                 });
 
@@ -396,6 +407,7 @@ public class RMOSPanel extends JPanel {
         if (!RMOSisEmpty) buttonPanel.add(removeMachineButton);
         if (!RMOSisEmpty) buttonPanel.add(activateDeactivateButton);
         if (!RMOSisEmpty) buttonPanel.add(emptyMachineButton);
+        buttonPanel.add(editPricesButton);
         if (!RMOSisEmpty) buttonPanel.add(showMachineStatsButton);
         buttonPanel.add(showGlobalStatsButton);
         buttonPanel.add(logoutButton);
