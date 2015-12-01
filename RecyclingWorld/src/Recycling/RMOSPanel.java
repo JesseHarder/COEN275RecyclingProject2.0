@@ -22,10 +22,15 @@ public class RMOSPanel extends JPanel {
 
     /* Public constants */
     public static final String lightBlueColorString = "#b3e6ff";
+    public static final Color lightBlueColor = Color.decode(lightBlueColorString);
 
     public static final String authenticationCardString = "Authentication Card";
     public static final String controlCardString = "Control Card";
     public static final String loginButtonPressedString = "Login Button Pressed";
+
+    public static final String itemCardString = "Item Card";
+    public static final String machineStatCardString = "Machine Stat Card";
+    public static final String globalStatCardString = "Global Stat Card";
 
     public static final String addMachineButtonPressedString = "Add Machine Button Pressed";
     public static final String removeMachineButtonPressedString = "Remove Machine Button Pressed";
@@ -52,10 +57,11 @@ public class RMOSPanel extends JPanel {
     // For the actual RMOS controls.
     JPanel controlCard;
         JPanel centerPanel;
-            JPanel displayArea;
-                JPanel itemPanel;
-                JPanel machineStatsPanel;
-                JPanel globalStatsPanel;
+            CardLayout displayCards;
+            JPanel displayPanel;
+                JPanel itemCard;
+                JPanel machineStatsCard;
+                JPanel globalStatsCard;
             DefaultListModel<String> rcmListModel;
             JScrollPane rcmJListScroll;
             JList rcmJList;
@@ -176,12 +182,28 @@ public class RMOSPanel extends JPanel {
             centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
                 centerPanel.add(Box.createHorizontalStrut(20));
 
-                displayArea = new JPanel();
-                displayArea.setBackground(Color.decode(lightBlueColorString));
+                displayCards = new CardLayout();
+                displayPanel = new JPanel();
+                displayPanel.setBackground(lightBlueColor);
+                displayPanel.setLayout(displayCards);
 
-                    
+                    itemCard = new JPanel();
+                    itemCard.setBackground(lightBlueColor);
 
-                centerPanel.add(displayArea);
+                    displayPanel.add(itemCard, itemCardString);
+
+                    machineStatsCard = new JPanel();
+                    machineStatsCard.setBackground(lightBlueColor);
+
+                    displayPanel.add(machineStatsCard, machineStatCardString);
+
+                    globalStatsCard = new JPanel();
+                    globalStatsCard.setBackground(Color.GREEN);
+
+                    displayPanel.add(globalStatsCard, globalStatCardString);
+
+                displayCards.show(displayPanel,globalStatCardString);
+                centerPanel.add(displayPanel);
 
                 centerPanel.add(Box.createHorizontalStrut(20));
 
