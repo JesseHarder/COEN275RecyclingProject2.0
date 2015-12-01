@@ -11,22 +11,32 @@ public class RecyclingMachine {
     // Used to track individual uses of the machine between emptying.
     class Session {
         private double moneyOwed;
+        private ItemContainer itemContainer;
 
         public Session(){
             moneyOwed = 0;
+            itemContainer = new ItemContainer();
+            itemContainer.setWeightCapacity(Double.MAX_VALUE);
         }
 
         public double getMoneyOwed(){
             return moneyOwed;
         }
-
         public void setMoneyOwed(double amount){
             moneyOwed = amount;
         }
-
         public void addMoneyOwed(double amount){
             moneyOwed = moneyOwed + amount;
         }
+
+        public ItemContainer getItemContainer() {
+            return itemContainer;
+        }
+        public void setItemContainer(ItemContainer itemContainer) {
+            this.itemContainer = itemContainer;
+        }
+        public boolean depositItem(String name, double weight) {return itemContainer.depositItem(name,weight);}
+
     }
 
     private boolean active;
