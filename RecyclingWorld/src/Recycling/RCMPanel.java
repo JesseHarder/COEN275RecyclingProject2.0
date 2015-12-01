@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -155,7 +156,8 @@ public class RCMPanel extends JPanel {
                 textArea.setText("RCM "+RCM.getID()+" is INACTIVE");
             else {
                 String message = "RCM "+RCM.getID()+" is ACTIVE";
-                message = message + "\nAmount owed: " + RCM.amountOwedForSession();
+                message = message + "\nAmount owed: $" + RCM.amountOwedForSession();
+
 
                 textArea.setText(message);
             }
@@ -176,11 +178,12 @@ public class RCMPanel extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         String id = RCM.getID();
                         double price = RCM.getPriceList().get(name);
-                        double weight = 2.5; // Eventually randomize this.
+                        double weight = Math.random() * 10; // Eventually randomize this.
                         Statistics.logTransaction(id,name,weight,price);
-//                    RCM.depositItem(name, weight);
-                        JOptionPane.showMessageDialog( null,
-                                "Depositing "+weight+" pounds of "+name+".");
+                        RCM.depositItem(name,weight);
+//                        JOptionPane.showMessageDialog( null,
+//                                "Depositing "+weight+" pounds of "+name+".");
+                        updateTextArea();
                     }
                 });
                 button.setActionCommand(depositButtonPressedString);
