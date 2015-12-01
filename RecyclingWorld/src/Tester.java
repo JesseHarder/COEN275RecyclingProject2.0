@@ -7,11 +7,12 @@ import Recycling.RecyclingData.*;
 
 
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 
 public class Tester {
 
-    public static void main(String [] args) throws FileNotFoundException {
-        Statistics.dropTables();
+    public static void main(String [] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
+//        Statistics.dropTables();
         Statistics.makeTables();
         RecyclingDemo RD = new RecyclingDemo();
     }

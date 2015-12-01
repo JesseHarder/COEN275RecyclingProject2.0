@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -20,7 +21,7 @@ public class RecyclingDemo {
     public RCMPanel rcmPanel;       // Change this back to private eventually.
     private RMOSPanel rmosPanel;
 
-    public RecyclingDemo() {
+    public RecyclingDemo() throws SQLException, ClassNotFoundException {
         mainFrame = new JFrame("Recycling Demo");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setPreferredSize(new Dimension(1200,600));
