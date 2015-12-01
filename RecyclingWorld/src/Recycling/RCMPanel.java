@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by JHarder on 11/28/15.
  */
-public class RCMPanel extends JPanel implements ActionListener {
+public class RCMPanel extends JPanel {
     private RecyclingMachine RCM;
 
     /* Interface elements */
@@ -193,14 +193,4 @@ public class RCMPanel extends JPanel implements ActionListener {
             buttonsPanel.add(getPaidButton);
         }
     }
-
-    /* Action Listener Methods */
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
-    /* RCM manipulation */
-
 }
