@@ -53,6 +53,7 @@ public class RMOSPanel extends JPanel {
         JPanel centerPanel;
             JPanel displayArea;
             DefaultListModel<String> rcmListModel;
+            JScrollPane rcmJListScroll;
             JList rcmJList;
         JPanel buttonPanel;
             JButton addMachineButton;
@@ -177,6 +178,7 @@ public class RMOSPanel extends JPanel {
                 centerPanel.add(Box.createHorizontalStrut(20));
 
                 rcmListModel = new DefaultListModel<String>();
+                rcmJListScroll = new JScrollPane();
                 rcmJList = new JList();
                 updateRCMList();
                 rcmJList.addListSelectionListener(new ListSelectionListener() {
@@ -188,7 +190,8 @@ public class RMOSPanel extends JPanel {
                         }
                     }
                 });
-                centerPanel.add(rcmJList);
+                rcmJListScroll.setViewportView(rcmJList);
+                centerPanel.add(rcmJListScroll);
 
             controlCard.add(centerPanel);
 
