@@ -150,7 +150,7 @@ public class RCMPanel extends JPanel {
                                 amount = RCM.amountOwedForSession();
                                 RCM.startNewSession();
                             } else {
-                                paymentType = "as cash";
+                                paymentType = " as cash";
                                 amount = RCM.withdrawCashAndStartNewSession();
                             }
 
