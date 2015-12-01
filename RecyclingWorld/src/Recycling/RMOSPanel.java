@@ -35,6 +35,74 @@ class labeledTextField extends JPanel {
 }
 
 public class RMOSPanel extends JPanel {
+
+    class PriceEditingPanel extends JPanel {
+        public static final String setPriceErrorString = "Price must be real number.";
+
+        JPanel upperPricePanel;
+            labeledTextField nameField;
+            labeledTextField priceField;
+            JLabel setPriceErrorLabel;
+            JButton setPriceButton;
+        JPanel lowerPricePanel;
+
+        public PriceEditingPanel () {
+            this (Color.GRAY);
+        }
+
+        public PriceEditingPanel (Color color) {
+            setBackground(color);
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+            upperPricePanel = new JPanel();
+            upperPricePanel.setBackground(getBackground());
+            upperPricePanel.setLayout(new FlowLayout());
+
+                nameField = new labeledTextField("Item Name:",10);
+                nameField.setBackground(upperPricePanel.getBackground());
+                upperPricePanel.add(nameField);
+
+                priceField = new labeledTextField("Price:",10);
+                priceField.setBackground(upperPricePanel.getBackground());
+                upperPricePanel.add(priceField);
+
+                setPriceButton = new JButton("Set Price");
+                setPriceButton.setBackground(upperPricePanel.getBackground());
+                setPriceButton.setActionCommand("Set Price Button Pressed");
+                setPriceButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String name = nameField.getTextField().getText();
+                        String priceString = priceField.getTextField().getText();
+
+                        if (RecHelper.isDouble(priceString)) {
+                            setPriceErrorLabel.setText("");
+                            double price = Double.parseDouble(priceString);
+                            RMOS.setPrice(name,price);
+                            // Update JList.
+                        } else {
+                            setPriceErrorLabel.setText(setPriceErrorString);
+                        }
+                    }
+                });
+                upperPricePanel.add(setPriceButton);
+
+                setPriceErrorLabel = new JLabel("");
+                setPriceErrorLabel.setForeground(Color.RED);
+                setPriceErrorLabel.setBackground(upperPricePanel.getBackground());
+                upperPricePanel.add(setPriceErrorLabel);
+
+            add(upperPricePanel);
+
+            add(Box.createHorizontalStrut(5));
+
+            lowerPricePanel = new JPanel();
+            lowerPricePanel.setBackground(color);
+            // Add stuff to right panel.
+            add(upperPricePanel);
+        }
+    }
+
     /* Data */
     private boolean loggedIn;
     private boolean updatingJList;
@@ -63,8 +131,6 @@ public class RMOSPanel extends JPanel {
     public static final String showMachineStatsButtonPressedString = "Show Machine Stats Button Pressed";
     public static final String showGlobalStatsButtonPressedString = "Show Global Stats Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
-
-    public static final String addPriceErrorString = "Price must be real number.";
 
     /* Interface Elements */
     CardLayout cards;
@@ -217,56 +283,7 @@ public class RMOSPanel extends JPanel {
                 displayPanel.setBackground(lightBlueColor);
                 displayPanel.setLayout(displayCards);
 
-                    pricesCard = new JPanel();
-                    pricesCard.setBackground(lightBlueColor);
-                    pricesCard.setLayout(new BoxLayout(pricesCard, BoxLayout.X_AXIS));
-
-                        JPanel leftPanel = new JPanel();
-                        leftPanel.setBackground(lightBlueColor);
-                        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-
-                            labeledTextField nameField = new labeledTextField("Item Name:",10);
-
-
-                            labeledTextField priceField = new labeledTextField("Price:",10);
-
-
-                            JLabel addPriceErrorLabel = new JLabel("");
-                            addPriceErrorLabel.setForeground(Color.RED);
-
-                            JButton priceAddButton = new JButton();
-                            priceAddButton.setActionCommand("Price Add Button Pressed");
-                            priceAddButton.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    String name = nameField.getTextField().getText();
-                                    String priceString = priceField.getTextField().getText();
-
-                                    if (RecHelper.isDouble(priceString)) {
-                                        addPriceErrorLabel.setText("");
-                                        double price = Double.parseDouble(priceString);
-                                        RMOS.setPrice(name,price);
-                                        // Update JList.
-                                    } else {
-                                        addPriceErrorLabel.setText(addPriceErrorString);
-                                    }
-                                }
-                            });
-
-                            leftPanel.add(nameField);
-                            leftPanel.add(priceField);
-                            leftPanel.add(priceAddButton);
-                            leftPanel.add(addPriceErrorLabel);
-
-                        pricesCard.add(leftPanel);
-
-                        pricesCard.add(Box.createHorizontalStrut(5));
-
-                        JPanel rightPanel = new JPanel();
-                        rightPanel.setBackground(lightBlueColor);
-                            // Add stuff to right panel.
-                        pricesCard.add(leftPanel);
-
+                    pricesCard = new PriceEditingPanel(displayPanel.getBackground());
                     displayPanel.add(pricesCard, pricesCardString);
 
                     machineStatsCard = new JPanel();
