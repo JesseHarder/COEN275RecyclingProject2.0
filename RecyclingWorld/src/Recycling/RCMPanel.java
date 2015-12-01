@@ -154,7 +154,10 @@ public class RCMPanel extends JPanel implements ActionListener {
             if (!RCM.isActive())
                 textArea.setText("RCM "+RCM.getID()+" is INACTIVE");
             else {
-                textArea.setText("RCM "+RCM.getID()+" is ACTIVE");
+                String message = "RCM "+RCM.getID()+" is ACTIVE";
+                message = message + "\nAmount owed: " + RCM.amountOwedForSession();
+
+                textArea.setText(message);
             }
 
         }
@@ -163,7 +166,7 @@ public class RCMPanel extends JPanel implements ActionListener {
     // To be called when the RCM's item list changes.
     public void updateButtons() {
         buttonsPanel.removeAll();
-        if (RCM != null) {
+        if (RCM != null && RCM.isActive()) {
             for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
                 String name = entry.getKey();
                 double price = entry.getValue();
@@ -186,8 +189,9 @@ public class RCMPanel extends JPanel implements ActionListener {
             }
 
             buttonsPanel.add(Box.createVerticalStrut(20));
+
+            buttonsPanel.add(getPaidButton);
         }
-        buttonsPanel.add(getPaidButton);
     }
 
     /* Action Listener Methods */

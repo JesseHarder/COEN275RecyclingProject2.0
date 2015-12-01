@@ -346,6 +346,7 @@ public class RMOSPanel extends JPanel {
                     int index = selectedRCMIndex();
                     rcmPanel.setRCM(RMOS.getMachines().get(index));
                     rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.simulationCardString);
+                    rcmPanel.updateRCMDisplay();
                 }
             } else {
                 rcmPanel.cards.show(rcmPanel.cardPanel,RCMPanel.preAuthenticationCardString);
