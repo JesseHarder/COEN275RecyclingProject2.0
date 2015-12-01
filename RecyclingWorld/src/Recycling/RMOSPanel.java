@@ -339,7 +339,7 @@ public class RMOSPanel extends JPanel {
                 });
 
                 updateButtonPanel();
-            controlCard.add(buttonPanel1); //Test
+            controlCard.add(buttonPanel1);
             controlCard.add(buttonPanel2);
 
         cardPanel.add(authenticationCard, authenticationCardString);
