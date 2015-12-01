@@ -215,6 +215,7 @@ public class RecyclingMonitoringStation {
         for (Integer i = 0; i < machines.size(); i++) {
             RecyclingMachine RCM = machines.get(i);
             RCM.setLocation("Location "+i);
+            RCM.setCashReserves(100.0);
         }
 
         setPrice("Wood", 5.0);

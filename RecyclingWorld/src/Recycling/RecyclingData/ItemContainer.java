@@ -68,9 +68,16 @@ public class ItemContainer {
         }
 
     }
-        // Adds amount of item to holder represented by the given "item".
-    public void depositItem(RecyclableItem item) {
-        depositItem(item.getName(), item.getWeight());
+
+    public boolean containsItem(String name) {
+        return contents.containsKey(name);
+    }
+
+        // Returns amount of a given item currently in the container.
+    public double amountOfItem(String name) {
+        double weight = 0.0;
+        if (containsItem(name)) weight = contents.get(name);
+        return weight;
     }
 
         // Empties the item holder.

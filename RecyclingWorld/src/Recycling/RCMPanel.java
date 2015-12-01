@@ -15,7 +15,7 @@ import java.util.Map;
 public class RCMPanel extends JPanel {
     private RecyclingMachine RCM;
 
-
+    private boolean inMetric;
     private boolean screenNeedsUpdating; // Used to tell if timer updates should do things.
 
     /* Interface elements */
@@ -31,7 +31,8 @@ public class RCMPanel extends JPanel {
             JTextArea textArea;
 
             JPanel buttonsPanel;
-            JButton getPaidButton;
+                JButton getPaidButton;
+                JButton metricButton;
 
     /* Public constants */
     public static final String preAuthenticationCardString = "Pre-Authentication Card";
@@ -39,6 +40,7 @@ public class RCMPanel extends JPanel {
     public static final String simulationCardString = "Simulation Card";
     public static final String depositButtonPressedString = "Deposit Button Pressed";
     public static final String getPaidButtonPressedString = "Get Paid Button Pressed";
+    public static final String metricButtonPressedString = "Metric Button Pressed";
 
     /* Getters and Setters */
     public RecyclingMachine getRCM() {return RCM;}
@@ -55,6 +57,7 @@ public class RCMPanel extends JPanel {
 
     public RCMPanel(Color color) {
         screenNeedsUpdating = false;
+        inMetric = false;
 
         // Start by setting up cards at top level.
         setBackground(color);
@@ -133,11 +136,22 @@ public class RCMPanel extends JPanel {
                         if (RCM.canWithdrawCashForSession()) paymentType = " as cash";
                         else paymentType = " in coupons";
 
-                        double amount = RCM.withdrawCashForSession();
+                        double amount = RCM.withdrawCashAndStartNewSession();
                         String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
                         textArea.setText(message);
 
                         scheduleScreenRefresh(5000);
+                    }
+                });
+
+                metricButton = new JButton("Get Paid");
+                metricButton.setActionCommand(metricButtonPressedString);
+                metricButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        inMetric = !inMetric;
+                        
+                        updateRCMDisplay();
                     }
                 });
 
@@ -193,7 +207,23 @@ public class RCMPanel extends JPanel {
                 textArea.setText("RCM "+RCM.getID()+" is INACTIVE");
             else {
                 String message = "RCM "+RCM.getID()+" is ACTIVE";
-                message = message + "\nAmount owed: $" + RCM.formatMoneyAmount(RCM.amountOwedForSession());
+
+                String weightUnit = "lbs";
+
+                for (String item:RCM.getPriceList().keySet())
+                {
+                    double weight = RCM.amountOfItemDepositedThisSession(item);
+                    if (weight != 0.0)
+                    {
+                        double cash = RCM.priceForItemThisSession(item);
+                        if (inMetric) {
+                            weightUnit = "metric units";
+                            //convert weight number to metric amount.
+                        }
+                        message += "\n"+RCM.formatDoubleAmount(weight,2)+" "+weightUnit+"of " + item + ": $" + RCM.formatMoneyAmount(cash);
+                    }
+                }
+                message += "\nTotal owed: $" + RCM.formatMoneyAmount(RCM.amountOwedForSession());
 
                 textArea.setText(message);
             }

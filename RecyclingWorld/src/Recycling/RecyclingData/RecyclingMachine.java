@@ -118,6 +118,18 @@ public class RecyclingMachine {
 
     /* Session management */
     public void startNewSession() {session = new Session();}
+    public double amountOfItemDepositedThisSession(String name) {
+        double weight = 0.0;
+        if (priceList.containsKey(name) && session.getItemContainer().containsItem(name))
+            weight = session.itemContainer.amountOfItem(name);
+        return weight;
+    }
+    public double priceForItemThisSession(String name) {
+        double weight = amountOfItemDepositedThisSession(name);
+        double cash = 0.0;
+        if (weight != 0.0) cash = priceForAmountOfItem(name, weight);
+        return cash;
+    }
 
     /* Item Container Manipulation */
 
@@ -125,7 +137,10 @@ public class RecyclingMachine {
     // Returns boolean for whether or not there was room to deposit.
     public boolean depositItem(String name, double weight) {
         boolean hasRoom = itemContainer.depositItem(name,weight);
-        if (hasRoom) session.addMoneyOwed(priceForAmountOfItem(name,weight));
+        if (hasRoom) {
+            session.addMoneyOwed(priceForAmountOfItem(name,weight));
+            session.depositItem(name,weight);
+        }
         return hasRoom;
     }
     public void empty() {
@@ -166,7 +181,7 @@ public class RecyclingMachine {
 
     // Called to potentially reduce cash reserves in machine and start a new session.
     //      Also returns amount owed to user, because why not.
-    public double withdrawCashForSession() {
+    public double withdrawCashAndStartNewSession() {
         double amount = amountOwedForSession();
 
         if (canWithdrawCashForSession()) moneyManager.withdraw(amount);
@@ -258,10 +273,20 @@ public class RecyclingMachine {
     }
 
     /* Double formatting helper function */
-    public static String formatMoneyAmount(double amount) {
-        DecimalFormat myFormat = new DecimalFormat("0.00");
+    public static String formatDoubleAmount(double amount, int sigFigs) {
+        String formatString = "0";
+        if (sigFigs > 0) {
+            formatString = formatString + ".";
+            for (int i = 0; i < sigFigs; i++)
+                formatString = formatString + "0";
+        }
+        DecimalFormat myFormat = new DecimalFormat(formatString);
         String myDoubleString = myFormat.format(amount);
         return myDoubleString;
+    }
+
+    public static String formatMoneyAmount(double amount) {
+        return formatDoubleAmount(amount, 2);
     }
 
     /* Setting up a state for testing other things with this RCM */
@@ -272,5 +297,7 @@ public class RecyclingMachine {
 
         depositItem("Stuff",3.0);
         depositItem("Things",5.0);
+
+        setCashReserves(100.0);
     }
 }
