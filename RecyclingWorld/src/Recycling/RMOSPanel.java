@@ -34,7 +34,8 @@ public class RMOSPanel extends JPanel {
         public static final String deactivateString = "Deactivate";
     public static final String emptyButtonPressedString = "Empty Button Pressed";
     public static final String editMachineButtonPressedString = "Edit Machine Button Pressed";
-    public static final String showStatsButtonPressedString = "Show Stats Button Pressed";
+    public static final String showMachineStatsButtonPressedString = "Show Machine Stats Button Pressed";
+    public static final String showGlobalStatsButtonPressedString = "Show Global Stats Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
 
     /* Interface Elements */
@@ -52,6 +53,9 @@ public class RMOSPanel extends JPanel {
     JPanel controlCard;
         JPanel centerPanel;
             JPanel displayArea;
+                JPanel itemPanel;
+                JPanel machineStatsPanel;
+                JPanel globalStatsPanel;
             DefaultListModel<String> rcmListModel;
             JScrollPane rcmJListScroll;
             JList rcmJList;
@@ -60,7 +64,8 @@ public class RMOSPanel extends JPanel {
             JButton removeMachineButton;
             JButton activateDeactivateButton;
             JButton emptyMachineButton;
-            JButton showStatsButton;
+            JButton showMachineStatsButton;
+            JButton showGlobalStatsButton;
             JButton logoutButton;
 
     /* Getters and Setters */
@@ -173,6 +178,9 @@ public class RMOSPanel extends JPanel {
 
                 displayArea = new JPanel();
                 displayArea.setBackground(Color.decode(lightBlueColorString));
+
+                    
+
                 centerPanel.add(displayArea);
 
                 centerPanel.add(Box.createHorizontalStrut(20));
@@ -261,9 +269,19 @@ public class RMOSPanel extends JPanel {
                 });
 
                 // Setup show stats button.
-                showStatsButton = new JButton("Show Stats");
-                showStatsButton.setActionCommand(showStatsButtonPressedString);
-                showStatsButton.addActionListener(new ActionListener() {
+                showMachineStatsButton = new JButton("Show Machine Stats");
+                showMachineStatsButton.setActionCommand(showMachineStatsButtonPressedString);
+                showMachineStatsButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "Implement this.");
+                    }
+                });
+
+                // Setup show stats button.
+                showGlobalStatsButton = new JButton("Show Global Stats");
+                showGlobalStatsButton.setActionCommand(showGlobalStatsButtonPressedString);
+                showGlobalStatsButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JOptionPane.showMessageDialog(null, "Implement this.");
@@ -356,7 +374,8 @@ public class RMOSPanel extends JPanel {
         if (!RMOSisEmpty) buttonPanel.add(removeMachineButton);
         if (!RMOSisEmpty) buttonPanel.add(activateDeactivateButton);
         if (!RMOSisEmpty) buttonPanel.add(emptyMachineButton);
-        if (!RMOSisEmpty) buttonPanel.add(showStatsButton);
+        if (!RMOSisEmpty) buttonPanel.add(showMachineStatsButton);
+        buttonPanel.add(showGlobalStatsButton);
         buttonPanel.add(logoutButton);
     }
 
