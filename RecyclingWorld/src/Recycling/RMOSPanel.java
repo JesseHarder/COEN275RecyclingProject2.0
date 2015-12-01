@@ -33,6 +33,8 @@ public class RMOSPanel extends JPanel {
         public static final String activateString = "Activate";
         public static final String deactivateString = "Deactivate";
     public static final String emptyButtonPressedString = "Empty Button Pressed";
+    public static final String editMachineButtonPressedString = "Edit Machine Button Pressed";
+    public static final String showStatsButtonPressedString = "Show Stats Button Pressed";
     public static final String logoutButtonPressedString = "Logout Button Pressed";
 
     /* Interface Elements */
@@ -57,6 +59,7 @@ public class RMOSPanel extends JPanel {
             JButton removeMachineButton;
             JButton activateDeactivateButton;
             JButton emptyMachineButton;
+            JButton showStatsButton;
             JButton logoutButton;
 
     /* Getters and Setters */
@@ -201,6 +204,7 @@ public class RMOSPanel extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         // Add machine button logic here.
                         RMOS.addMachine();
+                        updateButtonPanel();
                         updateRCMList();
                     }
                 });
@@ -216,9 +220,9 @@ public class RMOSPanel extends JPanel {
                             RecyclingMachine RCM = selectedRCM();
                             RMOS.removeMachineWithID(RCM.getID());
                             updateRCMList();
-//
-//                            updateButtonPanel();
-//                            updateRCMPanel();
+
+                            updateButtonPanel();
+                            updateRCMPanel();
                     }
                 }});
 
@@ -250,6 +254,16 @@ public class RMOSPanel extends JPanel {
                             updateButtonPanel();
                             updateRCMPanel();
                         }
+                    }
+                });
+
+                // Setup show stats button.
+                showStatsButton = new JButton("Show Stats");
+                showStatsButton.setActionCommand(showStatsButtonPressedString);
+                showStatsButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "Implement this.");
                     }
                 });
 
@@ -339,6 +353,7 @@ public class RMOSPanel extends JPanel {
         if (!RMOSisEmpty) buttonPanel.add(removeMachineButton);
         if (!RMOSisEmpty) buttonPanel.add(activateDeactivateButton);
         if (!RMOSisEmpty) buttonPanel.add(emptyMachineButton);
+        if (!RMOSisEmpty) buttonPanel.add(showStatsButton);
         buttonPanel.add(logoutButton);
     }
 
