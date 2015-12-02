@@ -208,30 +208,33 @@ public class RMOSPanel extends JPanel {
 
     // For the actual RMOS controls.
     JPanel controlCard;
-        JPanel centerPanel;
-            CardLayout displayCards;
-            JPanel displayPanel;
-                JPanel pricesCard;
-                JPanel machineStatsCard;
-                JPanel globalStatsCard;
-                    JLabel mostUsedByWeight;
-                    JLabel mostUsedByPayout;
-                    JLabel leastUsedByWeight;
-                    JLabel leastUsedByPayout;
-                    JLabel mostRecycledItem;
-            DefaultListModel<String> rcmListModel;
-            JScrollPane rcmJListScroll;
-            JList rcmJList;
-        JPanel buttonPanel1;
-            JButton addMachineButton;
-            JButton removeMachineButton;
-            JButton activateDeactivateButton;
-            JButton emptyMachineButton;
-        JPanel buttonPanel2;
-            JButton editPricesButton;
-            JButton showMachineStatsButton;
-            JButton showGlobalStatsButton;
-            JButton logoutButton;
+        JPanel labelPanel;
+            JLabel rmosLabel;
+        JPanel contentPanel;
+            JPanel centerPanel;
+                CardLayout displayCards;
+                JPanel displayPanel;
+                    JPanel pricesCard;
+                    JPanel machineStatsCard;
+                    JPanel globalStatsCard;
+                        JLabel mostUsedByWeight;
+                        JLabel mostUsedByPayout;
+                        JLabel leastUsedByWeight;
+                        JLabel leastUsedByPayout;
+                        JLabel mostRecycledItem;
+                DefaultListModel<String> rcmListModel;
+                JScrollPane rcmJListScroll;
+                JList rcmJList;
+            JPanel buttonPanel1;
+                JButton addMachineButton;
+                JButton removeMachineButton;
+                JButton activateDeactivateButton;
+                JButton emptyMachineButton;
+            JPanel buttonPanel2;
+                JButton editPricesButton;
+                JButton showMachineStatsButton;
+                JButton showGlobalStatsButton;
+                JButton logoutButton;
 
     /* Getters and Setters */
     public RecyclingMonitoringStation getRMOS() {
@@ -333,190 +336,199 @@ public class RMOSPanel extends JPanel {
         // Now Set up the control card.
 
         controlCard = new JPanel();
+        controlCard.setLayout(new BorderLayout());
 
-        controlCard.setLayout(new BoxLayout(controlCard, BoxLayout.Y_AXIS));
+            labelPanel = new JPanel();
+            labelPanel.setBackground(Color.BLUE);
 
-            centerPanel = new JPanel();
-            centerPanel.setBackground(color);
-            centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-                centerPanel.add(Box.createHorizontalStrut(20));
+        controlCard.add(labelPanel, BorderLayout.NORTH);
 
-                displayCards = new CardLayout();
-                displayPanel = new JPanel();
-                displayPanel.setBackground(lightBlueColor);
-                displayPanel.setLayout(displayCards);
+            contentPanel = new JPanel();
+            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-                    pricesCard = new PriceEditingPanel(displayPanel.getBackground());
-                    displayPanel.add(pricesCard, pricesCardString);
+                centerPanel = new JPanel();
+                centerPanel.setBackground(color);
+                centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+                    centerPanel.add(Box.createHorizontalStrut(20));
 
-                    machineStatsCard = new JPanel();
-                    machineStatsCard.setBackground(Color.RED);
-                    // Add machine card stuff here.
-                    displayPanel.add(machineStatsCard, machineStatCardString);
+                    displayCards = new CardLayout();
+                    displayPanel = new JPanel();
+                    displayPanel.setBackground(lightBlueColor);
+                    displayPanel.setLayout(displayCards);
 
-                    globalStatsCard = new JPanel();
-                    globalStatsCard.setLayout(new BoxLayout(globalStatsCard,BoxLayout.Y_AXIS));
-                    globalStatsCard.setBackground(Color.GREEN);
-                    // Add global stats stuff here.
-                        mostUsedByWeight = new JLabel();
-                        globalStatsCard.add(mostUsedByWeight);
-                        leastUsedByWeight = new JLabel();
-                        globalStatsCard.add(leastUsedByWeight);
-                        mostUsedByPayout = new JLabel();
-                        globalStatsCard.add(mostUsedByPayout);
-                        leastUsedByPayout = new JLabel();
-                        globalStatsCard.add(leastUsedByPayout);
-                        mostRecycledItem = new JLabel();
-                        globalStatsCard.add(mostRecycledItem);
-                        updateGlobalStats();
+                        pricesCard = new PriceEditingPanel(displayPanel.getBackground());
+                        displayPanel.add(pricesCard, pricesCardString);
 
+                        machineStatsCard = new JPanel();
+                        machineStatsCard.setBackground(Color.RED);
+                        // Add machine card stuff here.
+                        displayPanel.add(machineStatsCard, machineStatCardString);
 
-                    displayPanel.add(globalStatsCard, globalStatCardString);
-
-                displayCards.show(displayPanel,globalStatCardString);
-                centerPanel.add(displayPanel);
-
-                centerPanel.add(Box.createHorizontalStrut(20));
-
-                rcmListModel = new DefaultListModel<String>();
-                rcmJListScroll = new JScrollPane();
-                rcmJList = new JList();
-                updateRCMList();
-                rcmJList.addListSelectionListener(new ListSelectionListener() {
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        if (!updatingRCMJList) {
-                            updateButtonPanel();
-                            updateRCMPanel();
-                        }
-                    }
-                });
-                rcmJListScroll.setViewportView(rcmJList);
-                centerPanel.add(rcmJListScroll);
-
-            controlCard.add(centerPanel);
-
-            buttonPanel1 = new JPanel();
-            buttonPanel1.setBackground(Color.DARK_GRAY);
-            buttonPanel1.setLayout(new FlowLayout());
-
-                // Setup add machine button
-                addMachineButton = new JButton("Add Machine");
-                addMachineButton.setActionCommand(addMachineButtonPressedString);
-                addMachineButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Add machine button logic here.
-                        RMOS.addMachine();
-                        updateButtonPanel();
-                        updateRCMList();
-                    }
-                });
-
-                // Setup remove machine button
-                removeMachineButton = new JButton("Remove Machine");
-                removeMachineButton.setActionCommand(removeMachineButtonPressedString);
-                removeMachineButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Remove machine button logic here.
-                        if (!RMOS.getMachines().isEmpty()) {
-                            RecyclingMachine RCM = selectedRCM();
-                            RMOS.removeMachineWithID(RCM.getID());
-                            updateRCMList();
-
-                            updateButtonPanel();
-                            updateRCMPanel();
-                    }
-                }});
-
-                // Setup activate button
-                activateDeactivateButton = new JButton(activateString);
-                activateDeactivateButton.setActionCommand(activateButtonPressedString);
-                activateDeactivateButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (!RMOS.getMachines().isEmpty()) {
-                            RecyclingMachine RCM = selectedRCM();
-                            RCM.setActive(!RCM.isActive());
-                            updateButtonPanel();
-                            updateRCMPanel();
-                        }
-                    }
-                });
-
-                // Setup empty button
-                emptyMachineButton = new JButton("Empty Machine");
-                emptyMachineButton.setActionCommand(emptyButtonPressedString);
-                emptyMachineButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Empty button logic here.
-                        if(!RMOS.getMachines().isEmpty()){
-                            RecyclingMachine RCM = selectedRCM();
-                            RCM.empty();
-                            updateButtonPanel();
-                            updateRCMPanel();
-                        }
-                    }
-                });
-
-            buttonPanel2 = new JPanel();
-            buttonPanel2.setBackground(Color.DARK_GRAY);
-            buttonPanel2.setLayout(new FlowLayout());
-
-                // Setup show stats button.
-                editPricesButton = new JButton("Edit Prices");
-                editPricesButton.setActionCommand(editPricesButtonPressedString);
-                editPricesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        displayCards.show(displayPanel, pricesCardString);
-                    }
-                });
-
-                // Setup show stats button.
-                showMachineStatsButton = new JButton("Show Machine Stats");
-                showMachineStatsButton.setActionCommand(showMachineStatsButtonPressedString);
-                showMachineStatsButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        displayCards.show(displayPanel, machineStatCardString);
-                    }
-                });
-
-                // Setup show stats button.
-                showGlobalStatsButton = new JButton("Show Global Stats");
-                showGlobalStatsButton.setActionCommand(showGlobalStatsButtonPressedString);
-                showGlobalStatsButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
+                        globalStatsCard = new JPanel();
+                        globalStatsCard.setLayout(new BoxLayout(globalStatsCard,BoxLayout.Y_AXIS));
+                        globalStatsCard.setBackground(Color.GREEN);
+                        // Add global stats stuff here.
+                            mostUsedByWeight = new JLabel();
+                            globalStatsCard.add(mostUsedByWeight);
+                            leastUsedByWeight = new JLabel();
+                            globalStatsCard.add(leastUsedByWeight);
+                            mostUsedByPayout = new JLabel();
+                            globalStatsCard.add(mostUsedByPayout);
+                            leastUsedByPayout = new JLabel();
+                            globalStatsCard.add(leastUsedByPayout);
+                            mostRecycledItem = new JLabel();
+                            globalStatsCard.add(mostRecycledItem);
                             updateGlobalStats();
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
-                        } catch (ClassNotFoundException e1) {
-                            e1.printStackTrace();
+
+
+                        displayPanel.add(globalStatsCard, globalStatCardString);
+
+                    displayCards.show(displayPanel,globalStatCardString);
+                    centerPanel.add(displayPanel);
+
+                    centerPanel.add(Box.createHorizontalStrut(20));
+
+                    rcmListModel = new DefaultListModel<String>();
+                    rcmJListScroll = new JScrollPane();
+                    rcmJList = new JList();
+                    updateRCMList();
+                    rcmJList.addListSelectionListener(new ListSelectionListener() {
+                        @Override
+                        public void valueChanged(ListSelectionEvent e) {
+                            if (!updatingRCMJList) {
+                                updateButtonPanel();
+                                updateRCMPanel();
+                            }
                         }
-                        displayCards.show(displayPanel, globalStatCardString);
-                    }
-                });
+                    });
+                    rcmJListScroll.setViewportView(rcmJList);
+                    centerPanel.add(rcmJListScroll);
 
-                // Setup logout button.
-                logoutButton = new JButton("Logout");
-                logoutButton.setActionCommand(logoutButtonPressedString);
-                logoutButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        loggedIn = false;
-                        cards.show(cardPanel, authenticationCardString);
-                        updateRCMPanel();
-                    }
-                });
+                contentPanel.add(centerPanel);
 
-                updateButtonPanel();
-            controlCard.add(buttonPanel1);
-            controlCard.add(buttonPanel2);
+                buttonPanel1 = new JPanel();
+                buttonPanel1.setBackground(Color.DARK_GRAY);
+                buttonPanel1.setLayout(new FlowLayout());
+
+                    // Setup add machine button
+                    addMachineButton = new JButton("Add Machine");
+                    addMachineButton.setActionCommand(addMachineButtonPressedString);
+                    addMachineButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Add machine button logic here.
+                            RMOS.addMachine();
+                            updateButtonPanel();
+                            updateRCMList();
+                        }
+                    });
+
+                    // Setup remove machine button
+                    removeMachineButton = new JButton("Remove Machine");
+                    removeMachineButton.setActionCommand(removeMachineButtonPressedString);
+                    removeMachineButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Remove machine button logic here.
+                            if (!RMOS.getMachines().isEmpty()) {
+                                RecyclingMachine RCM = selectedRCM();
+                                RMOS.removeMachineWithID(RCM.getID());
+                                updateRCMList();
+
+                                updateButtonPanel();
+                                updateRCMPanel();
+                        }
+                    }});
+
+                    // Setup activate button
+                    activateDeactivateButton = new JButton(activateString);
+                    activateDeactivateButton.setActionCommand(activateButtonPressedString);
+                    activateDeactivateButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (!RMOS.getMachines().isEmpty()) {
+                                RecyclingMachine RCM = selectedRCM();
+                                RCM.setActive(!RCM.isActive());
+                                updateButtonPanel();
+                                updateRCMPanel();
+                            }
+                        }
+                    });
+
+                    // Setup empty button
+                    emptyMachineButton = new JButton("Empty Machine");
+                    emptyMachineButton.setActionCommand(emptyButtonPressedString);
+                    emptyMachineButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Empty button logic here.
+                            if(!RMOS.getMachines().isEmpty()){
+                                RecyclingMachine RCM = selectedRCM();
+                                RCM.empty();
+                                updateButtonPanel();
+                                updateRCMPanel();
+                            }
+                        }
+                    });
+
+                buttonPanel2 = new JPanel();
+                buttonPanel2.setBackground(Color.DARK_GRAY);
+                buttonPanel2.setLayout(new FlowLayout());
+
+                    // Setup show stats button.
+                    editPricesButton = new JButton("Edit Prices");
+                    editPricesButton.setActionCommand(editPricesButtonPressedString);
+                    editPricesButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            displayCards.show(displayPanel, pricesCardString);
+                        }
+                    });
+
+                    // Setup show stats button.
+                    showMachineStatsButton = new JButton("Show Machine Stats");
+                    showMachineStatsButton.setActionCommand(showMachineStatsButtonPressedString);
+                    showMachineStatsButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            displayCards.show(displayPanel, machineStatCardString);
+                        }
+                    });
+
+                    // Setup show stats button.
+                    showGlobalStatsButton = new JButton("Show Global Stats");
+                    showGlobalStatsButton.setActionCommand(showGlobalStatsButtonPressedString);
+                    showGlobalStatsButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                updateGlobalStats();
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            } catch (ClassNotFoundException e1) {
+                                e1.printStackTrace();
+                            }
+                            displayCards.show(displayPanel, globalStatCardString);
+                        }
+                    });
+
+                    // Setup logout button.
+                    logoutButton = new JButton("Logout");
+                    logoutButton.setActionCommand(logoutButtonPressedString);
+                    logoutButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            loggedIn = false;
+                            cards.show(cardPanel, authenticationCardString);
+                            updateRCMPanel();
+                        }
+                    });
+
+                    updateButtonPanel();
+                contentPanel.add(buttonPanel1);
+                contentPanel.add(buttonPanel2);
+
+            controlCard.add(contentPanel, BorderLayout.CENTER);
 
         cardPanel.add(authenticationCard, authenticationCardString);
         cardPanel.add(controlCard, controlCardString);
