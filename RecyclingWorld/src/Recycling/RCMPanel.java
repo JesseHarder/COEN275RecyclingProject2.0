@@ -107,11 +107,13 @@ public class RCMPanel extends JPanel {
             simCard.setLayout(new BorderLayout());
                 // Setup the label panel.
                 labelPanel = new JPanel();
-                labelPanel.setBackground(Color.LIGHT_GRAY);
-                labelPanel.setLayout(new BorderLayout());
+                labelPanel.setBackground(Color.WHITE);
+                labelPanel.setLayout(new BoxLayout(labelPanel,BoxLayout.X_AXIS));
 
+                    labelPanel.add(Box.createHorizontalGlue());
                     rcmlabel = new JLabel("RCM");
                     labelPanel.add(rcmlabel, BorderLayout.CENTER);
+                    labelPanel.add(Box.createHorizontalGlue());
 
                 simCard.add(labelPanel, BorderLayout.NORTH);
 

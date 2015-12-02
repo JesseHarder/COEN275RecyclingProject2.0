@@ -38,136 +38,6 @@ class labeledTextField extends JPanel {
 }
 
 public class RMOSPanel extends JPanel {
-
-    /* Price Editing Panel Class */
-    class PriceEditingPanel extends JPanel {
-        public static final String setPriceErrorString = "Price must be real number.";
-
-        boolean updatingPricesJList;
-
-        JPanel upperPricePanel;
-            labeledTextField nameField;
-            labeledTextField priceField;
-            JLabel setPriceErrorLabel;
-            JButton setPriceButton;
-        JPanel lowerPricePanel;
-            JScrollPane pricesJListScroll;
-            DefaultListModel<String> pricesListModel;
-            JList pricesJList;
-            JButton removePriceButton;
-
-
-        public PriceEditingPanel () {
-            this (Color.GRAY);
-        }
-
-        public PriceEditingPanel (Color color) {
-            updatingPricesJList = false;
-
-            setBackground(color);
-            setLayout(new BorderLayout());
-
-            upperPricePanel = new JPanel();
-            upperPricePanel.setBackground(getBackground());
-            upperPricePanel.setLayout(new FlowLayout());
-
-                nameField = new labeledTextField("Item Name:",10);
-                nameField.setBackground(upperPricePanel.getBackground());
-                upperPricePanel.add(nameField);
-
-                priceField = new labeledTextField("Price:",10);
-                priceField.setBackground(upperPricePanel.getBackground());
-                upperPricePanel.add(priceField);
-
-                setPriceButton = new JButton("Set Price");
-                setPriceButton.setBackground(upperPricePanel.getBackground());
-                setPriceButton.setActionCommand("Set Price Button Pressed");
-                setPriceButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String name = nameField.getTextField().getText();
-                        String priceString = priceField.getTextField().getText();
-
-                        if (RecHelper.isDouble(priceString)) {
-                            setPriceErrorLabel.setText("");
-                            double price = Double.parseDouble(priceString);
-                            RMOS.setPrice(name,price);
-                            updatePricesJList();
-                        } else {
-                            setPriceErrorLabel.setText(setPriceErrorString);
-                        }
-                    }
-                });
-                upperPricePanel.add(setPriceButton);
-
-                setPriceErrorLabel = new JLabel("");
-                setPriceErrorLabel.setForeground(Color.RED);
-                setPriceErrorLabel.setBackground(upperPricePanel.getBackground());
-                upperPricePanel.add(setPriceErrorLabel);
-
-            add(upperPricePanel, BorderLayout.NORTH);
-
-            add(Box.createHorizontalStrut(5));
-
-            lowerPricePanel = new JPanel();
-            lowerPricePanel.setBackground(color);
-            lowerPricePanel.setLayout(new FlowLayout());
-
-                pricesListModel = new DefaultListModel<String>();
-                pricesJListScroll = new JScrollPane();
-                pricesJList = new JList();
-                updatePricesJList();
-                pricesJList.addListSelectionListener(new ListSelectionListener() {
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        if (!updatingPricesJList) {
-                            updateRCMPanel();
-                        }
-                    }
-                });
-                pricesJListScroll.setViewportView(pricesJList);
-                lowerPricePanel.add(pricesJListScroll);
-
-                removePriceButton = new JButton("Remove Price");
-                removePriceButton.setActionCommand("Remove Price Button Pressed");
-                removePriceButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String val = (String)pricesJList.getSelectedValue();
-                        String name = val.split(":")[0];
-                        RMOS.removePrice(name);
-                        updatePricesJList();
-                    }
-                });
-                lowerPricePanel.add(removePriceButton);
-
-            add(lowerPricePanel, BorderLayout.CENTER);
-        }
-
-        public void updatePricesJList() {
-            updatingPricesJList = true;
-            int indexTemp = pricesJList.getSelectedIndex();
-            pricesListModel.clear();
-
-            for (Map.Entry<String, Double> entry:RMOS.getPriceList().entrySet()) {
-                String itemName = entry.getKey();
-                String itemPrice = entry.getValue().toString();
-                String listEntry = itemName + ": $" + itemPrice;
-                pricesListModel.addElement(listEntry);
-            }
-
-            pricesJList.setModel(pricesListModel);
-            updatingPricesJList = false;
-            if (indexTemp < 0) {
-                pricesJList.setSelectedIndex(0);
-            } else if (indexTemp >= pricesJList.getModel().getSize()) {
-                pricesJList.setSelectedIndex(pricesJList.getModel().getSize() - 1);
-            } else {
-                pricesJList.setSelectedIndex(indexTemp);
-            }
-        }
-    }
-
     /* Data */
     private boolean loggedIn;
     private boolean updatingRCMJList;
@@ -342,10 +212,12 @@ public class RMOSPanel extends JPanel {
 
             labelPanel = new JPanel();
             labelPanel.setBackground(Color.WHITE);
-            labelPanel.setLayout(new BorderLayout());
+            labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
 
+                labelPanel.add(Box.createHorizontalGlue());
                 rmosLabel = new JLabel("RMOS");
-                labelPanel.add(rmosLabel, BorderLayout.CENTER);
+                labelPanel.add(rmosLabel);
+                labelPanel.add(Box.createHorizontalGlue());
 
             controlCard.add(labelPanel, BorderLayout.NORTH);
 
@@ -643,5 +515,132 @@ public class RMOSPanel extends JPanel {
 
     }
 
+    /* Price Editing Panel Class */
+    class PriceEditingPanel extends JPanel {
+        public static final String setPriceErrorString = "Price must be real number.";
 
+        boolean updatingPricesJList;
+
+        JPanel upperPricePanel;
+        labeledTextField nameField;
+        labeledTextField priceField;
+        JLabel setPriceErrorLabel;
+        JButton setPriceButton;
+        JPanel lowerPricePanel;
+        JScrollPane pricesJListScroll;
+        DefaultListModel<String> pricesListModel;
+        JList pricesJList;
+        JButton removePriceButton;
+
+
+        public PriceEditingPanel () {
+            this (Color.GRAY);
+        }
+
+        public PriceEditingPanel (Color color) {
+            updatingPricesJList = false;
+
+            setBackground(color);
+            setLayout(new BorderLayout());
+
+            upperPricePanel = new JPanel();
+            upperPricePanel.setBackground(getBackground());
+            upperPricePanel.setLayout(new FlowLayout());
+
+            nameField = new labeledTextField("Item Name:",10);
+            nameField.setBackground(upperPricePanel.getBackground());
+            upperPricePanel.add(nameField);
+
+            priceField = new labeledTextField("Price:",10);
+            priceField.setBackground(upperPricePanel.getBackground());
+            upperPricePanel.add(priceField);
+
+            setPriceButton = new JButton("Set Price");
+            setPriceButton.setBackground(upperPricePanel.getBackground());
+            setPriceButton.setActionCommand("Set Price Button Pressed");
+            setPriceButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String name = nameField.getTextField().getText();
+                    String priceString = priceField.getTextField().getText();
+
+                    if (RecHelper.isDouble(priceString)) {
+                        setPriceErrorLabel.setText("");
+                        double price = Double.parseDouble(priceString);
+                        RMOS.setPrice(name,price);
+                        updatePricesJList();
+                    } else {
+                        setPriceErrorLabel.setText(setPriceErrorString);
+                    }
+                }
+            });
+            upperPricePanel.add(setPriceButton);
+
+            setPriceErrorLabel = new JLabel("");
+            setPriceErrorLabel.setForeground(Color.RED);
+            setPriceErrorLabel.setBackground(upperPricePanel.getBackground());
+            upperPricePanel.add(setPriceErrorLabel);
+
+            add(upperPricePanel, BorderLayout.NORTH);
+
+            add(Box.createHorizontalStrut(5));
+
+            lowerPricePanel = new JPanel();
+            lowerPricePanel.setBackground(color);
+            lowerPricePanel.setLayout(new FlowLayout());
+
+            pricesListModel = new DefaultListModel<String>();
+            pricesJListScroll = new JScrollPane();
+            pricesJList = new JList();
+            updatePricesJList();
+            pricesJList.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (!updatingPricesJList) {
+                        updateRCMPanel();
+                    }
+                }
+            });
+            pricesJListScroll.setViewportView(pricesJList);
+            lowerPricePanel.add(pricesJListScroll);
+
+            removePriceButton = new JButton("Remove Price");
+            removePriceButton.setActionCommand("Remove Price Button Pressed");
+            removePriceButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String val = (String)pricesJList.getSelectedValue();
+                    String name = val.split(":")[0];
+                    RMOS.removePrice(name);
+                    updatePricesJList();
+                }
+            });
+            lowerPricePanel.add(removePriceButton);
+
+            add(lowerPricePanel, BorderLayout.CENTER);
+        }
+
+        public void updatePricesJList() {
+            updatingPricesJList = true;
+            int indexTemp = pricesJList.getSelectedIndex();
+            pricesListModel.clear();
+
+            for (Map.Entry<String, Double> entry:RMOS.getPriceList().entrySet()) {
+                String itemName = entry.getKey();
+                String itemPrice = entry.getValue().toString();
+                String listEntry = itemName + ": $" + itemPrice;
+                pricesListModel.addElement(listEntry);
+            }
+
+            pricesJList.setModel(pricesListModel);
+            updatingPricesJList = false;
+            if (indexTemp < 0) {
+                pricesJList.setSelectedIndex(0);
+            } else if (indexTemp >= pricesJList.getModel().getSize()) {
+                pricesJList.setSelectedIndex(pricesJList.getModel().getSize() - 1);
+            } else {
+                pricesJList.setSelectedIndex(indexTemp);
+            }
+        }
+    }
 }
