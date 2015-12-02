@@ -37,6 +37,7 @@ public class RecyclingMonitoringStation {
 
     // Getting and Setting Prices
     public double getPrice(String name) {return priceList.get(name);}
+
     public void setPrice(String name, Double price) {
         priceList.put(name, price);
 
@@ -44,6 +45,19 @@ public class RecyclingMonitoringStation {
         for (RecyclingMachine RCM:machines) {
             RCM.setPrice(name, price);
         }
+    }
+
+    // Removes given item from the price list.
+    // Returns boolean value for whether or not price was found in list.
+    public boolean removePrice(String name) {
+        if (priceList.containsKey(name)) {
+            priceList.remove(name);
+            for (RecyclingMachine RCM:machines) {
+                RCM.removePrice(name);
+            }
+            return true;
+        }
+        return false;
     }
 
     /* Machine Manipulation */

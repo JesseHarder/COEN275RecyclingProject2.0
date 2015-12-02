@@ -1,7 +1,6 @@
 package Recycling.RecyclingData;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -129,7 +128,7 @@ public class RecyclingMachine {
     public double priceForItemThisSession(String name) {
         double weight = amountOfItemDepositedThisSession(name);
         double cash = 0.0;
-        if (weight != 0.0) cash = priceForAmountOfItem(name, weight);
+        if (weight != 0.0) cash = getPriceForAmountOfItem(name, weight);
         return cash;
     }
 
@@ -140,7 +139,7 @@ public class RecyclingMachine {
     public boolean depositItem(String name, double weight) {
         boolean hasRoom = itemContainer.depositItem(name,weight);
         if (hasRoom) {
-            session.addMoneyOwed(priceForAmountOfItem(name,weight));
+            session.addMoneyOwed(getPriceForAmountOfItem(name,weight));
             session.depositItem(name,weight);
         }
         return hasRoom;
@@ -156,7 +155,16 @@ public class RecyclingMachine {
         // Getting and Setting Prices
     public double getPrice(String name) {return priceList.get(name);}
     public void setPrice(String name, Double price) {priceList.put(name, price);}
-    public double priceForAmountOfItem(String name, double weight) {return getPrice(name) * weight;}
+    // Removes given item from the price list.
+    // Returns boolean value for whether or not price was found in list.
+    public boolean removePrice(String name) {
+        if (priceList.containsKey(name)) {
+            priceList.remove(name);
+            return true;
+        }
+        return false;
+    }
+    public double getPriceForAmountOfItem(String name, double weight) {return getPrice(name) * weight;}
 
     /* Money Manipulation */
     public double getCashReserves() {

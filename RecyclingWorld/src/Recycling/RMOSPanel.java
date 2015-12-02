@@ -65,7 +65,7 @@ public class RMOSPanel extends JPanel {
             updatingPricesJList = false;
 
             setBackground(color);
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setLayout(new BorderLayout());
 
             upperPricePanel = new JPanel();
             upperPricePanel.setBackground(getBackground());
@@ -105,7 +105,7 @@ public class RMOSPanel extends JPanel {
                 setPriceErrorLabel.setBackground(upperPricePanel.getBackground());
                 upperPricePanel.add(setPriceErrorLabel);
 
-            add(upperPricePanel);
+            add(upperPricePanel, BorderLayout.NORTH);
 
             add(Box.createHorizontalStrut(5));
 
@@ -113,32 +113,35 @@ public class RMOSPanel extends JPanel {
             lowerPricePanel.setBackground(color);
             lowerPricePanel.setLayout(new FlowLayout());
 
-                removePriceButton = new JButton("Remove Price");
-                removePriceButton.setActionCommand("Remove Price Button Pressed");
-                removePriceButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Remove a price.
-                    }
-                });
-                lowerPricePanel.add(removePriceButton);
-
                 pricesListModel = new DefaultListModel<String>();
                 pricesJListScroll = new JScrollPane();
                 pricesJList = new JList();
                 updatePricesJList();
                 pricesJList.addListSelectionListener(new ListSelectionListener() {
-                        @Override
-                        public void valueChanged(ListSelectionEvent e) {
-                            if (!updatingPricesJList) {
-                                updateRCMPanel();
-                            }
+                    @Override
+                    public void valueChanged(ListSelectionEvent e) {
+                        if (!updatingPricesJList) {
+                            updateRCMPanel();
                         }
-                    });
+                    }
+                });
                 pricesJListScroll.setViewportView(pricesJList);
                 lowerPricePanel.add(pricesJListScroll);
 
-            add(lowerPricePanel);
+                removePriceButton = new JButton("Remove Price");
+                removePriceButton.setActionCommand("Remove Price Button Pressed");
+                removePriceButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String val = (String)pricesJList.getSelectedValue();
+                        String name = val.split(":")[0];
+                        RMOS.removePrice(name);
+                        updatePricesJList();
+                    }
+                });
+                lowerPricePanel.add(removePriceButton);
+
+            add(lowerPricePanel, BorderLayout.CENTER);
         }
 
         public void updatePricesJList() {
@@ -150,7 +153,6 @@ public class RMOSPanel extends JPanel {
                 String itemName = entry.getKey();
                 String itemPrice = entry.getValue().toString();
                 String listEntry = itemName + ": $" + itemPrice;
-                System.out.println(listEntry);
                 pricesListModel.addElement(listEntry);
             }
 
@@ -370,7 +372,7 @@ public class RMOSPanel extends JPanel {
 
                         globalStatsCard = new JPanel();
                         globalStatsCard.setLayout(new BoxLayout(globalStatsCard,BoxLayout.Y_AXIS));
-                        globalStatsCard.setBackground(Color.GREEN);
+                        globalStatsCard.setBackground(displayPanel.getBackground());
                         // Add global stats stuff here.
                             mostUsedByWeight = new JLabel();
                             globalStatsCard.add(mostUsedByWeight);
