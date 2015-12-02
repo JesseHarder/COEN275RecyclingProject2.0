@@ -26,15 +26,18 @@ public class RCMPanel extends JPanel {
         JPanel preAuthenticationCard;
         JPanel noRCMCard;
         JPanel simCard;
-            JPanel displayPanel;
-            JPanel dispensePanel;
-                JLabel dispenserErrorMessage;
-            JTextArea textArea;
+            JPanel labelPanel;
+                JLabel rcmlabel;
+            JPanel contentPanel;
+                JPanel displayPanel;
+                JPanel dispensePanel;
+                    JLabel dispenserErrorMessage;
+                JTextArea textArea;
 
-            JPanel buttonsPanel;
-                JButton getCashButton;
-                JButton getCouponsButton;
-                JButton metricButton;
+                JPanel buttonsPanel;
+                    JButton getCashButton;
+                    JButton getCouponsButton;
+                    JButton metricButton;
 
     /* Public constants */
     public static final String preAuthenticationCardString = "Pre-Authentication Card";
@@ -101,93 +104,110 @@ public class RCMPanel extends JPanel {
         /* Set up card for primary functionality. */
             simCard = new JPanel();
             simCard.setBackground(color);
-            simCard.setLayout(new BoxLayout(simCard, BoxLayout.X_AXIS));
+            simCard.setLayout(new BorderLayout());
+                // Setup the label panel.
+                labelPanel = new JPanel();
+                labelPanel.setBackground(Color.LIGHT_GRAY);
+                labelPanel.setLayout(new BorderLayout());
 
-            simCard.add(Box.createHorizontalStrut(10));
+                    rcmlabel = new JLabel("RCM");
+                    labelPanel.add(rcmlabel, BorderLayout.CENTER);
 
-                displayPanel = new JPanel();
-                displayPanel.setBackground(Color.GRAY);
-                displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
+                simCard.add(labelPanel, BorderLayout.NORTH);
 
-                    displayPanel.add(Box.createVerticalStrut(75));
+                // Setup main content panel.
+                contentPanel = new JPanel();
+                contentPanel.setBackground(simCard.getBackground());
+                contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
 
-                    textArea = new JTextArea();
-                    textArea.setEditable(false);
-                    textArea.setBackground(Color.decode("#b3e6ff"));
-                    displayPanel.add(textArea);
+                contentPanel.add(Box.createHorizontalStrut(10));
 
-                    displayPanel.add(Box.createVerticalStrut(75));
+                    displayPanel = new JPanel();
+                    displayPanel.setBackground(Color.GRAY);
+                    displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
 
-                    dispensePanel = new JPanel();
-                    dispensePanel.setBackground(Color.BLACK);
-                    dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
-                    dispensePanel.add(Box.createVerticalStrut(20));
-                        dispenserErrorMessage = new JLabel("Can't Deposit"); // Initially hidden.
-                    dispensePanel.add(dispenserErrorMessage);
-                    dispensePanel.add(Box.createVerticalStrut(20));
-                    displayPanel.add(dispensePanel);
+                        displayPanel.add(Box.createVerticalStrut(75));
 
-                    displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
+                        textArea = new JTextArea();
+                        textArea.setEditable(false);
+                        textArea.setBackground(Color.decode("#b3e6ff"));
+                        displayPanel.add(textArea);
+
+                        displayPanel.add(Box.createVerticalStrut(75));
+
+                        dispensePanel = new JPanel();
+                        dispensePanel.setBackground(Color.BLACK);
+                        dispensePanel.setLayout(new BoxLayout(dispensePanel, BoxLayout.Y_AXIS));
+                        dispensePanel.add(Box.createVerticalStrut(20));
+                            dispenserErrorMessage = new JLabel("Can't Deposit"); // Initially hidden.
+                        dispensePanel.add(dispenserErrorMessage);
+                        dispensePanel.add(Box.createVerticalStrut(20));
+                        displayPanel.add(dispensePanel);
+
+                        displayPanel.add(Box.createRigidArea(new Dimension(0,50)));
 
 
-            simCard.add(displayPanel);
+                contentPanel.add(displayPanel);
 
-            simCard.add(Box.createHorizontalStrut(10));
+                contentPanel.add(Box.createHorizontalStrut(10));
 
-                /* Start code for buttons */
+                    /* Start code for buttons */
 
-                getCashButton = new JButton("Get Cash");
-                getCashButton.setActionCommand(getCashButtonPressedString);
+                    getCashButton = new JButton("Get Cash");
+                    getCashButton.setActionCommand(getCashButtonPressedString);
 
-                getCouponsButton = new JButton("Get Coupons");
-                getCouponsButton.setActionCommand(getCouponsButtonPressedString);
+                    getCouponsButton = new JButton("Get Coupons");
+                    getCouponsButton.setActionCommand(getCouponsButtonPressedString);
 
-                    ActionListener paymentActionListener = new ActionListener() {
+                        ActionListener paymentActionListener = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String paymentType;
+                                double amount;
+                                // If not enough cash or user requested coupons.
+                                if (!RCM.canWithdrawCashForSession()
+                                        || e.getActionCommand().equals(getCouponsButtonPressedString)) {
+                                    paymentType = " in coupons";
+                                    amount = RCM.amountOwedForSession();
+                                    RCM.startNewSession();
+                                } else {
+                                    paymentType = " as cash";
+                                    amount = RCM.withdrawCashAndStartNewSession();
+                                }
+
+                                String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
+                                message += "\nPlease add another item to start a new session.";
+                                textArea.setText(message);
+
+    //                            scheduleScreenRefresh(5000);
+
+                            }
+                        };
+
+                    getCashButton.addActionListener(paymentActionListener);
+                    getCouponsButton.addActionListener(paymentActionListener);
+
+                    metricButton = new JButton("Metric");
+                    metricButton.setActionCommand(metricButtonPressedString);
+                    metricButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            String paymentType;
-                            double amount;
-                            // If not enough cash or user requested coupons.
-                            if (!RCM.canWithdrawCashForSession()
-                                    || e.getActionCommand().equals(getCouponsButtonPressedString)) {
-                                paymentType = " in coupons";
-                                amount = RCM.amountOwedForSession();
-                                RCM.startNewSession();
-                            } else {
-                                paymentType = " as cash";
-                                amount = RCM.withdrawCashAndStartNewSession();
-                            }
-
-                            String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
-                            message += "\nPlease add another item to start a new session.";
-                            textArea.setText(message);
-
-//                            scheduleScreenRefresh(5000);
-
+                            inMetric = !inMetric;
+                            metricButton.setText((inMetric) ? "Imperial" : "Metric");
+                            updateRCMDisplay();
                         }
-                    };
+                    });
 
-                getCashButton.addActionListener(paymentActionListener);
-                getCouponsButton.addActionListener(paymentActionListener);
+                    buttonsPanel = new JPanel();
+                    buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+                    buttonsPanel.setBackground(Color.decode(lightBlueColorString));
+                // Add buttons.
+                contentPanel.add(buttonsPanel);
 
-                metricButton = new JButton("Metric");
-                metricButton.setActionCommand(metricButtonPressedString);
-                metricButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        inMetric = !inMetric;
-                        metricButton.setText((inMetric) ? "Imperial" : "Metric");
-                        updateRCMDisplay();
-                    }
-                });
+                contentPanel.add(Box.createHorizontalStrut(10));
 
-                buttonsPanel = new JPanel();
-                buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-                buttonsPanel.setBackground(Color.decode(lightBlueColorString));
-            // Add buttons.
-            simCard.add(buttonsPanel);
+            simCard.add(contentPanel, BorderLayout.CENTER);
 
-            simCard.add(Box.createHorizontalStrut(10));
         cardPanel.add(simCard, simulationCardString);
 
         if (RCM == null)

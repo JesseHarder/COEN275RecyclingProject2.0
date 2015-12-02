@@ -339,9 +339,13 @@ public class RMOSPanel extends JPanel {
         controlCard.setLayout(new BorderLayout());
 
             labelPanel = new JPanel();
-            labelPanel.setBackground(Color.BLUE);
+            labelPanel.setBackground(Color.WHITE);
+            labelPanel.setLayout(new BorderLayout());
 
-        controlCard.add(labelPanel, BorderLayout.NORTH);
+                rmosLabel = new JLabel("RMOS");
+                labelPanel.add(rmosLabel, BorderLayout.CENTER);
+
+            controlCard.add(labelPanel, BorderLayout.NORTH);
 
             contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
