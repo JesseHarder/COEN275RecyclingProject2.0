@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * Created by JHarder on 11/28/15.
@@ -42,18 +43,27 @@ public class RMOSPanel extends JPanel {
     class PriceEditingPanel extends JPanel {
         public static final String setPriceErrorString = "Price must be real number.";
 
+        boolean updatingPricesJList;
+
         JPanel upperPricePanel;
             labeledTextField nameField;
             labeledTextField priceField;
             JLabel setPriceErrorLabel;
             JButton setPriceButton;
         JPanel lowerPricePanel;
+            JScrollPane pricesJListScroll;
+            DefaultListModel<String> pricesListModel;
+            JList pricesJList;
+            JButton removePriceButton;
+
 
         public PriceEditingPanel () {
             this (Color.GRAY);
         }
 
         public PriceEditingPanel (Color color) {
+            updatingPricesJList = false;
+
             setBackground(color);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -82,7 +92,7 @@ public class RMOSPanel extends JPanel {
                             setPriceErrorLabel.setText("");
                             double price = Double.parseDouble(priceString);
                             RMOS.setPrice(name,price);
-                            // Update JList.
+                            updatePricesJList();
                         } else {
                             setPriceErrorLabel.setText(setPriceErrorString);
                         }
@@ -100,16 +110,65 @@ public class RMOSPanel extends JPanel {
             add(Box.createHorizontalStrut(5));
 
             lowerPricePanel = new JPanel();
-            lowerPricePanel.setBackground(Color.GREEN);
+            lowerPricePanel.setBackground(color);
             lowerPricePanel.setLayout(new FlowLayout());
 
+                removePriceButton = new JButton("Remove Price");
+                removePriceButton.setActionCommand("Remove Price Button Pressed");
+                removePriceButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Remove a price.
+                    }
+                });
+                lowerPricePanel.add(removePriceButton);
+
+                pricesListModel = new DefaultListModel<String>();
+                pricesJListScroll = new JScrollPane();
+                pricesJList = new JList();
+                updatePricesJList();
+                pricesJList.addListSelectionListener(new ListSelectionListener() {
+                        @Override
+                        public void valueChanged(ListSelectionEvent e) {
+                            if (!updatingPricesJList) {
+                                updateRCMPanel();
+                            }
+                        }
+                    });
+                pricesJListScroll.setViewportView(pricesJList);
+                lowerPricePanel.add(pricesJListScroll);
+
             add(lowerPricePanel);
+        }
+
+        public void updatePricesJList() {
+            updatingPricesJList = true;
+            int indexTemp = pricesJList.getSelectedIndex();
+            pricesListModel.clear();
+
+            for (Map.Entry<String, Double> entry:RMOS.getPriceList().entrySet()) {
+                String itemName = entry.getKey();
+                String itemPrice = entry.getValue().toString();
+                String listEntry = itemName + ": $" + itemPrice;
+                System.out.println(listEntry);
+                pricesListModel.addElement(listEntry);
+            }
+
+            pricesJList.setModel(pricesListModel);
+            updatingPricesJList = false;
+            if (indexTemp < 0) {
+                pricesJList.setSelectedIndex(0);
+            } else if (indexTemp >= pricesJList.getModel().getSize()) {
+                pricesJList.setSelectedIndex(pricesJList.getModel().getSize() - 1);
+            } else {
+                pricesJList.setSelectedIndex(indexTemp);
+            }
         }
     }
 
     /* Data */
     private boolean loggedIn;
-    private boolean updatingJList;
+    private boolean updatingRCMJList;
     private RecyclingMonitoringStation RMOS;
     private RCMPanel rcmPanel;
 
@@ -199,7 +258,7 @@ public class RMOSPanel extends JPanel {
     public RMOSPanel(Color color) throws SQLException, ClassNotFoundException {
         // Data setup.
         loggedIn = false;
-        updatingJList = false;
+        updatingRCMJList = false;
 
         RMOS = new RecyclingMonitoringStation();
         RMOS.testPrep();
@@ -326,7 +385,7 @@ public class RMOSPanel extends JPanel {
                 rcmJList.addListSelectionListener(new ListSelectionListener() {
                     @Override
                     public void valueChanged(ListSelectionEvent e) {
-                        if (!updatingJList) {
+                        if (!updatingRCMJList) {
                             updateButtonPanel();
                             updateRCMPanel();
                         }
@@ -467,7 +526,7 @@ public class RMOSPanel extends JPanel {
     }
 
     public void updateRCMList() {
-        updatingJList = true;
+        updatingRCMJList = true;
         int indexTemp = rcmJList.getSelectedIndex();
         rcmListModel.clear();
 
@@ -476,7 +535,7 @@ public class RMOSPanel extends JPanel {
         }
 
         rcmJList.setModel(rcmListModel);
-        updatingJList = false;
+        updatingRCMJList = false;
         if (indexTemp < 0) {
             rcmJList.setSelectedIndex(0);
         } else if (indexTemp >= rcmJList.getModel().getSize()) {

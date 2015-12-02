@@ -159,9 +159,11 @@ public class RCMPanel extends JPanel {
                             }
 
                             String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
+                            message += "\nPlease add another item to start a new session.";
                             textArea.setText(message);
 
-                            scheduleScreenRefresh(5000);
+//                            scheduleScreenRefresh(5000);
+
                         }
                     };
 
@@ -211,7 +213,7 @@ public class RCMPanel extends JPanel {
         validate();
         repaint();
     }
-
+    // Used if multi-threading is wanted.
     public void scheduleScreenRefresh(int miliseconds) {
         screenNeedsUpdating = true;
         Timer timer = new Timer(miliseconds, new ActionListener() {
@@ -280,11 +282,11 @@ public class RCMPanel extends JPanel {
                         boolean hadRoomForDeposit = RCM.depositItem(name,weight);
                         if (hadRoomForDeposit) {
                             Statistics.logTransaction(id,name,weight,price);
-                            updateTextArea();
+                            updateRCMDisplay();
                         } else {
                             dispensePanel.setBackground(Color.RED);
                             dispenserErrorMessage.setText("Not Enough Room");
-                            scheduleScreenRefresh(3000);
+//                            scheduleScreenRefresh(3000);
                         }
                     }
                 });
