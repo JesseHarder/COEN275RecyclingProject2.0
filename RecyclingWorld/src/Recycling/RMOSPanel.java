@@ -216,6 +216,8 @@ public class RMOSPanel extends JPanel {
 
                 labelPanel.add(Box.createHorizontalGlue());
                 rmosLabel = new JLabel("RMOS");
+                Font f = rmosLabel.getFont();
+                rmosLabel.setFont(new Font(f.getName(), f.getStyle(), 24));
                 labelPanel.add(rmosLabel);
                 labelPanel.add(Box.createHorizontalGlue());
 

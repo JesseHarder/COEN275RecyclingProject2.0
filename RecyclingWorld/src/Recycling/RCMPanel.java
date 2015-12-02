@@ -112,6 +112,8 @@ public class RCMPanel extends JPanel {
 
                     labelPanel.add(Box.createHorizontalGlue());
                     rcmlabel = new JLabel("RCM");
+                    Font f = rcmlabel.getFont();
+                    rcmlabel.setFont(new Font(f.getName(), f.getStyle(), 24));
                     labelPanel.add(rcmlabel, BorderLayout.CENTER);
                     labelPanel.add(Box.createHorizontalGlue());
 
