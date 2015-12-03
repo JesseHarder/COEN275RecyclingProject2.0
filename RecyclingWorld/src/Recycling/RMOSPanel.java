@@ -89,13 +89,14 @@ public class RMOSPanel extends JPanel {
                 JPanel displayPanel;
                     JPanel pricesCard;
                     JPanel machineStatsCard;
-                        JLabel currentRCM;
-                        JLabel moneyInRCM;
-                        JLabel capacityRCM;
-                        JLabel weightOfItems;
-                        JLabel timesEmptied;
-                        JLabel lastEmptied;
-                        JLabel timesUsed;
+                        JLabel currentRCMLabel;
+                        JLabel currentRCMLocationLabel;
+                        JLabel moneyInRCMLabel;
+                        JLabel capacityRCMLabel;
+                        JLabel weightOfItemsLabel;
+                        JLabel timesEmptiedLabel;
+                        JLabel lastEmptiedLabel;
+                        JLabel timesUsedLabel;
                     JPanel globalStatsCard;
                         JLabel mostUsedByWeight;
                         JLabel mostUsedByPayout;
@@ -252,20 +253,22 @@ public class RMOSPanel extends JPanel {
                         machineStatsCard.setLayout(new BoxLayout(machineStatsCard,BoxLayout.Y_AXIS));
                         machineStatsCard.setBackground(displayPanel.getBackground());
                         // Add machine card stuff here.
-                            currentRCM = new JLabel();
-                            machineStatsCard.add(currentRCM);
-                            moneyInRCM = new JLabel();
-                            machineStatsCard.add(moneyInRCM);
-                            capacityRCM = new JLabel();
-                            machineStatsCard.add(capacityRCM);
-                            weightOfItems = new JLabel();
-                            machineStatsCard.add(weightOfItems);
-                            timesEmptied = new JLabel();
-                            machineStatsCard.add(timesEmptied);
-                            lastEmptied = new JLabel();
-                            machineStatsCard.add(lastEmptied);
-                            timesUsed = new JLabel();
-                            machineStatsCard.add(timesUsed);
+                            currentRCMLabel = new JLabel();
+                            machineStatsCard.add(currentRCMLabel);
+                            currentRCMLocationLabel = new JLabel();
+                            machineStatsCard.add(currentRCMLocationLabel);
+                            moneyInRCMLabel = new JLabel();
+                            machineStatsCard.add(moneyInRCMLabel);
+                            capacityRCMLabel = new JLabel();
+                            machineStatsCard.add(capacityRCMLabel);
+                            weightOfItemsLabel = new JLabel();
+                            machineStatsCard.add(weightOfItemsLabel);
+                            timesEmptiedLabel = new JLabel();
+                            machineStatsCard.add(timesEmptiedLabel);
+                            lastEmptiedLabel = new JLabel();
+                            machineStatsCard.add(lastEmptiedLabel);
+                            timesUsedLabel = new JLabel();
+                            machineStatsCard.add(timesUsedLabel);
                         displayPanel.add(machineStatsCard, machineStatCardString);
 
                         globalStatsCard = new JPanel();
@@ -554,16 +557,17 @@ public class RMOSPanel extends JPanel {
 
     public void updateMachineStats() throws SQLException, ClassNotFoundException {
         RecyclingMachine sRCM = selectedRCM();
-        String selectedRCMstring = sRCM.getID();
+        String selectedRCMID = sRCM.getID();
+        String selectedRCMLocation = sRCM.getLocation();
 
-        currentRCM.setText("Viewing Data for Recycling Machine ID: "+selectedRCMstring);
-
-        moneyInRCM.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
-        capacityRCM.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+"("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
-        weightOfItems.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMstring)));
-        timesEmptied.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMstring)));
-        lastEmptied.setText("Last Emptied: "+sRCM.getItemContainer().lastEmptied());
-        timesUsed.setText("Number of Times Used: "+String.valueOf(Statistics.timesUsed(selectedRCMstring)));
+        currentRCMLabel.setText("Viewing Data for Recycling Machine ID: "+selectedRCMID);
+        currentRCMLocationLabel.setText("Machine location: "+selectedRCMLocation);
+        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
+        capacityRCMLabel.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+" ("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
+        weightOfItemsLabel.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMID)));
+        timesEmptiedLabel.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMID)));
+        lastEmptiedLabel.setText("Last Emptied: "+sRCM.getItemContainer().lastEmptied());
+        timesUsedLabel.setText("Number of Times Used: "+String.valueOf(Statistics.timesUsed(selectedRCMID)));
     }
 
     public void updateGlobalStats() throws SQLException, ClassNotFoundException {
