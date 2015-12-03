@@ -249,8 +249,23 @@ public class RMOSPanel extends JPanel {
                         displayPanel.add(pricesCard, pricesCardString);
 
                         machineStatsCard = new JPanel();
-                        machineStatsCard.setBackground(Color.RED);
+                        machineStatsCard.setLayout(new BoxLayout(machineStatsCard,BoxLayout.Y_AXIS));
+                        machineStatsCard.setBackground(displayPanel.getBackground());
                         // Add machine card stuff here.
+                            currentRCM = new JLabel();
+                            machineStatsCard.add(currentRCM);
+                            moneyInRCM = new JLabel();
+                            machineStatsCard.add(moneyInRCM);
+                            capacityRCM = new JLabel();
+                            machineStatsCard.add(capacityRCM);
+                            weightOfItems = new JLabel();
+                            machineStatsCard.add(weightOfItems);
+                            timesEmptied = new JLabel();
+                            machineStatsCard.add(timesEmptied);
+                            lastEmptied = new JLabel();
+                            machineStatsCard.add(lastEmptied);
+                            timesUsed = new JLabel();
+                            machineStatsCard.add(timesUsed);
                         displayPanel.add(machineStatsCard, machineStatCardString);
 
                         globalStatsCard = new JPanel();
