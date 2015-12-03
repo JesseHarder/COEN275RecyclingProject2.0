@@ -28,7 +28,7 @@ public class MoneyManager {
     /* Depositing  and Withdrawing */
 
     public boolean canWithdraw(double amount) {
-        return  amount >= cashReserves;
+        return  amount <= cashReserves;
     }
 
     public void deposit(double amount) {
