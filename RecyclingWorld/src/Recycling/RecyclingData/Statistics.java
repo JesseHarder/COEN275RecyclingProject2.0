@@ -60,8 +60,37 @@ public class Statistics{
                         "MONEY REAL,"+
                         "EMPTIED INT);";
         update(sql,"Tables built. Ready to run statistics.");
+        if(checkEmpty()==0){String filltable = "INSERT INTO TRANSACTIONS VALUES (null,null,null,null,null,null,null,null)";
+        update(filltable,"");
+        }
     }
 
+
+    public static double checkEmpty(){
+        Connection c = null;
+        Statement stmt = null;
+        ResultSet rs;
+        double answer = 0;
+        try{Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:stats.db");
+            c.setAutoCommit(false);
+            stmt = c.createStatement();
+            rs = stmt.executeQuery( "SElECT COUNT(*) AS ANSWER FROM TRANSACTIONS " );
+            answer = rs.getDouble("ANSWER");
+            rs.close();
+            stmt.close();
+            c.close();
+
+
+//            System.out.println(message);
+        }
+        catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+
+        return answer;
+    }
 
     public static void logTransaction(String id, String item_type, double units, double price){
 
