@@ -225,8 +225,8 @@ public class RecyclingMachine {
         try {
             PrintWriter writer = new PrintWriter(nameForSaveFile());
 
-            writer.println(ID); // 1. Record machine ID.
-            writer.println(location); // 2. Record machine location.
+            writer.println(ID);                             // 1. Record machine ID.
+            writer.println(location);                       // 2. Record machine location.
             writer.println(moneyManager.getCashReserves()); // 3. Record current cash reserves.
 
             // Record item holder info..
@@ -234,7 +234,7 @@ public class RecyclingMachine {
             writer.println(itemContainer.contentsString());     // 5. Record total machine contents.
 
             // Record current session information.
-            writer.println(session.getMoneyOwed()); // 6. Record money owed for session.
+            writer.println(session.getMoneyOwed());                      // 6. Record money owed for session.
             writer.println(session.getItemContainer().contentsString()); // 7. Record contents of session.
 
             writer.close();
@@ -247,20 +247,23 @@ public class RecyclingMachine {
             FileInputStream fin = new FileInputStream(nameForSaveFile());
             Scanner sc = new Scanner(fin);
 
-            ID = sc.nextLine(); // 1. Read ID.
-            location = sc.nextLine(); // 2. Read location.
-            double cash = sc.nextDouble(); // 3. 
+            ID = sc.nextLine();                             // 1. Read ID.
+            location = sc.nextLine();                       // 2. Read location.
+
+            double cash = sc.nextDouble();                  // 3. Load money reserves.
             moneyManager.setCashReserves(cash);
-            double owed = sc.nextDouble();
+
+            double weightCapactiy = sc.nextDouble();        // 4. Load weight limit.
+            itemContainer.setWeightCapacity(weightCapactiy);
+
+            String contentsString = sc.nextLine();          // 5. Load itemContainer contents.
+            itemContainer.initWithContents(contentsString);
+
+            double owed = sc.nextDouble();                  // 6. Load money owed for session.
             session.setMoneyOwed(owed);
-            while (sc.hasNext())
-            {
-                String itemString = sc.next();
-                String[] parts = itemString.split(",");
-                String name = parts[0];
-                double weight = Double.parseDouble(parts[1]);
-                itemContainer.depositItem(name,weight);
-            }
+
+            String sessionContentsString = sc.nextLine();   // 7. Load session contents.
+            session.getItemContainer().initWithContents(sessionContentsString);
 
             fin.close();
         }

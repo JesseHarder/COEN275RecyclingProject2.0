@@ -106,4 +106,15 @@ public class ItemContainer {
         }
         return message;
     }
+
+    public void initWithContents(String contentsString) {
+        String [] elements = contentsString.split(";");
+        for (String element:elements) {
+            String [] parts = element.split(",");
+            String name = parts[0];
+            String weightString = parts[1];
+            double weight = Double.parseDouble(weightString);
+            depositItem(name, weight);
+        }
+    }
 }

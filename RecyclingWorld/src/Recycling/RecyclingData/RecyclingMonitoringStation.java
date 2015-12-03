@@ -141,14 +141,14 @@ public class RecyclingMonitoringStation {
         try {
             PrintWriter writer = new PrintWriter(nameForSaveFile);
 
-            // First line is Username and Password pairs.
+            // 1. First line is Username and Password pairs.
             // There is a comma between each username and password.
             // There is a semicolon separating the pairs.
             for (Map.Entry<String,String> entry:userPaswordMap.entrySet()) {
                 writer.print(entry.getKey() + "," + entry.getValue() + ";");
             }
 
-            // Second line is comma-separated list of RCM IDs.
+            // 2. Second line is comma-separated list of RCM IDs.
             for (int i = 0; i < machines.size(); i++) {
                 // Tell machines to save their status.
                 machines.get(i).saveStatus();

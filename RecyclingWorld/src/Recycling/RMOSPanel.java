@@ -11,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -136,7 +137,8 @@ public class RMOSPanel extends JPanel {
         updatingRCMJList = false;
 
         RMOS = new RecyclingMonitoringStation();
-        RMOS.testPrep();
+        RMOS.loadStatus();
+//        RMOS.testPrep();
 
         rcmPanel = null;
 
@@ -298,6 +300,7 @@ public class RMOSPanel extends JPanel {
                         public void actionPerformed(ActionEvent e) {
                             // Add machine button logic here.
                             RMOS.addMachine();
+                            RMOS.saveStatus();
                             updateButtonPanel();
                             updateRCMList();
                         }
@@ -313,6 +316,7 @@ public class RMOSPanel extends JPanel {
                             if (!RMOS.getMachines().isEmpty()) {
                                 RecyclingMachine RCM = selectedRCM();
                                 RMOS.removeMachineWithID(RCM.getID());
+                                RMOS.saveStatus();
                                 updateRCMList();
 
                                 updateButtonPanel();
@@ -329,6 +333,11 @@ public class RMOSPanel extends JPanel {
                             if (!RMOS.getMachines().isEmpty()) {
                                 RecyclingMachine RCM = selectedRCM();
                                 RCM.setActive(!RCM.isActive());
+                                try {
+                                    RCM.saveStatus();
+                                } catch (FileNotFoundException except) {
+                                    System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
+                                }
                                 updateButtonPanel();
                                 updateRCMPanel();
                             }
@@ -345,6 +354,11 @@ public class RMOSPanel extends JPanel {
                             if(!RMOS.getMachines().isEmpty()){
                                 RecyclingMachine RCM = selectedRCM();
                                 RCM.empty();
+                                try {
+                                    RCM.saveStatus();
+                                } catch (FileNotFoundException except) {
+                                    System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
+                                }
                                 updateButtonPanel();
                                 updateRCMPanel();
                             }
@@ -517,6 +531,8 @@ public class RMOSPanel extends JPanel {
 
     }
 
+    /* Auto-saving thread functions */
+
     /* Price Editing Panel Class */
     class PriceEditingPanel extends JPanel {
         public static final String setPriceErrorString = "Price must be real number.";
@@ -570,6 +586,7 @@ public class RMOSPanel extends JPanel {
                         setPriceErrorLabel.setText("");
                         double price = Double.parseDouble(priceString);
                         RMOS.setPrice(name,price);
+                        RMOS.saveStatus();
                         updatePricesJList();
                     } else {
                         setPriceErrorLabel.setText(setPriceErrorString);
@@ -614,6 +631,7 @@ public class RMOSPanel extends JPanel {
                     String val = (String)pricesJList.getSelectedValue();
                     String name = val.split(":")[0];
                     RMOS.removePrice(name);
+                    RMOS.saveStatus();
                     updatePricesJList();
                 }
             });
