@@ -105,7 +105,7 @@ public class ItemContainer {
         } else {
             message = "";
             for (Map.Entry entry:getContents().entrySet()) {
-                message = entry.getKey() + "," + entry.getValue() + ";";
+                message += entry.getKey() + "," + entry.getValue() + ";";
             }
         }
 

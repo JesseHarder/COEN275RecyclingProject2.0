@@ -238,6 +238,17 @@ public class RecyclingMachine {
             writer.println(session.getMoneyOwed());                      // 7. Record money owed for session.
             writer.println(session.getItemContainer().contentsString()); // 8. Record contents of session.
 
+            // 9. Record price list info
+            // There is a comma between each item name and price.
+            // There is a semicolon separating the pairs.
+            if (priceList.isEmpty()) {
+                writer.print("no prices");
+            } else {
+                for (Map.Entry<String,Double> entry:priceList.entrySet()) {
+                    writer.print(entry.getKey() + "," + entry.getValue() + ";");
+                }
+            }
+
             writer.close();
         }
         catch(IOException ex){ ex.printStackTrace();}
@@ -279,6 +290,20 @@ public class RecyclingMachine {
             sessionContentsString = sc.nextLine();
             if (logLoad) System.out.println("8-"+sessionContentsString+"-");
             session.getItemContainer().initWithContents(sessionContentsString);
+
+            // 9. Load prices.
+            String pricesString = sc.nextLine();
+            if (!pricesString.equals("no prices")) {
+                String[] pricePairs = pricesString.split(";");
+                for (String pair:pricePairs) {
+                    if (!pair.equals("")) {
+                        String [] s = pair.split(",");
+                        String itemName = s[0];
+                        double price = Double.parseDouble(s[1]);
+                        priceList.put(itemName,price);
+                    }
+                }
+            }
 
             fin.close();
         }

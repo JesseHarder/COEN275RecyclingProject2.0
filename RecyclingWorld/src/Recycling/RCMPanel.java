@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -178,6 +179,11 @@ public class RCMPanel extends JPanel {
                                     paymentType = " as cash";
                                     amount = RCM.withdrawCashAndStartNewSession();
                                 }
+                                try {
+                                    RCM.saveStatus();
+                                } catch (FileNotFoundException e1) {
+                                    System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
+                                }
 
                                 String message = "Thank you for recycling. Here is $" + RCM.formatMoneyAmount(amount) + paymentType +".";
                                 message += "\nPlease add another item to start a new session.";
@@ -304,6 +310,11 @@ public class RCMPanel extends JPanel {
                         double price = RCM.getPriceList().get(name);
                         double weight = Math.random() * 10; // Eventually randomize this.
                         boolean hadRoomForDeposit = RCM.depositItem(name,weight);
+                        try {
+                            RCM.saveStatus();
+                        } catch (FileNotFoundException e1) {
+                            System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
+                        }
                         if (hadRoomForDeposit) {
                             Statistics.logTransaction(id,name,weight,price);
                             updateRCMDisplay();

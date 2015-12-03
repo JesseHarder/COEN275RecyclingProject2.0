@@ -438,7 +438,7 @@ public class RMOSPanel extends JPanel {
         rcmListModel.clear();
 
         for (RecyclingMachine RCM:RMOS.getMachines()) {
-            rcmListModel.addElement(RCM.getID());
+            rcmListModel.addElement(RCM.getID() + "-" + RCM.getLocation());
         }
 
         rcmJList.setModel(rcmListModel);
@@ -634,6 +634,7 @@ public class RMOSPanel extends JPanel {
                     RMOS.removePrice(name);
                     RMOS.saveStatus();
                     updatePricesJList();
+                    updateRCMPanel();
                 }
             });
             lowerPricePanel.add(removePriceButton);
