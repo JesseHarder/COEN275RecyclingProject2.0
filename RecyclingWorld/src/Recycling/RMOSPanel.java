@@ -545,6 +545,20 @@ public class RMOSPanel extends JPanel {
         }
     }
 
+    public void updateMachineStats() throws SQLException, ClassNotFoundException {
+        RecyclingMachine sRCM = selectedRCM();
+        String selectedRCMstring = sRCM.getID();
+
+        currentRCM.setText("Viewing Data for Recycling Machine ID: "+selectedRCMstring);
+
+        moneyInRCM.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
+        capacityRCM.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+"("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
+        weightOfItems.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMstring)));
+        timesEmptied.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMstring)));
+        lastEmptied.setText("Last Emptied: "+sRCM.getItemContainer().lastEmptied());
+        timesUsed.setText("Number of Times Used: "+String.valueOf(Statistics.timesUsed(selectedRCMstring)));
+    }
+
     public void updateGlobalStats() throws SQLException, ClassNotFoundException {
         mostUsedByWeight.setText("Most Used Machine by Weight: "+ Statistics.mostUsedByWeight()+"("+Statistics.highestWeight()+")");
         mostUsedByPayout.setText("Most Used Machine by Payout: "+ Statistics.mostUsedByPayout()+"($"+Statistics.highestPayout()+")");
