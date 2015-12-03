@@ -293,7 +293,7 @@ public class RCMPanel extends JPanel {
         buttonsPanel.removeAll();
         if (RCM != null && RCM.isActive()) {
             for (Map.Entry<String,Double> entry:RCM.getPriceList().entrySet()) {
-                String name = entry.getKey();
+                final String name = entry.getKey();
                 double price = entry.getValue();
                 String weightUnit = "lb";
 

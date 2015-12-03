@@ -407,6 +407,13 @@ public class RMOSPanel extends JPanel {
                     showMachineStatsButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            try {
+                                updateMachineStats();
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            } catch (ClassNotFoundException e1) {
+                                e1.printStackTrace();
+                            }
                             displayCards.show(displayPanel, machineStatCardString);
                         }
                     });
