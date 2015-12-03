@@ -412,6 +412,7 @@ public class RMOSPanel extends JPanel {
                     logoutButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            RMOS.saveStatus();
                             loggedIn = false;
                             cards.show(cardPanel, authenticationCardString);
                             updateRCMPanel();

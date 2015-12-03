@@ -244,27 +244,40 @@ public class RecyclingMachine {
     }
 
     public void loadStatus() {
+        boolean logLoad = false;
         try {
             FileInputStream fin = new FileInputStream(nameForSaveFile());
             Scanner sc = new Scanner(fin);
 
             ID = sc.nextLine();                             // 1. Read ID.
+            if (logLoad) System.out.println("1-"+ID+"-");
+
             location = sc.nextLine();                       // 2. Read location.
+            if (logLoad) System.out.println("2-"+location+"-");
+
             active = Boolean.parseBoolean(sc.nextLine());   // 3. Read active status.
+            if (logLoad) System.out.println("3-"+active+"-");
 
             double cash = sc.nextDouble();                  // 4. Load money reserves.
+            if (logLoad) System.out.println("4-"+cash+"-");
             moneyManager.setCashReserves(cash);
 
             double weightCapactiy = sc.nextDouble();        // 5. Load weight limit.
+            if (logLoad) System.out.println("5-"+weightCapactiy+"-");
             itemContainer.setWeightCapacity(weightCapactiy);
 
             String contentsString = sc.nextLine();          // 6. Load itemContainer contents.
+            contentsString = sc.nextLine();
+            if (logLoad) System.out.println("6-"+contentsString+"-");
             itemContainer.initWithContents(contentsString);
 
             double owed = sc.nextDouble();                  // 7. Load money owed for session.
+            if (logLoad) System.out.println("7-"+owed+"-");
             session.setMoneyOwed(owed);
 
             String sessionContentsString = sc.nextLine();   // 8. Load session contents.
+            sessionContentsString = sc.nextLine();
+            if (logLoad) System.out.println("8-"+sessionContentsString+"-");
             session.getItemContainer().initWithContents(sessionContentsString);
 
             fin.close();

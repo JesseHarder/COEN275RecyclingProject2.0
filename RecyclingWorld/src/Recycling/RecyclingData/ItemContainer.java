@@ -113,7 +113,6 @@ public class ItemContainer {
     }
 
     public void initWithContents(String contentsString) {
-        System.out.println(contentsString);
         if (!contentsString.equals("empty")) {
             String [] elements = contentsString.split(";");
             for (String element:elements) {
