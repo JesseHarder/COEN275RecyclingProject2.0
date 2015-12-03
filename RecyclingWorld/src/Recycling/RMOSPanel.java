@@ -303,6 +303,14 @@ public class RMOSPanel extends JPanel {
                         @Override
                         public void valueChanged(ListSelectionEvent e) {
                             if (!updatingRCMJList) {
+                                try {
+                                    updateMachineStats();
+                                    updateGlobalStats();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                } catch (ClassNotFoundException e1) {
+                                    e1.printStackTrace();
+                                }
                                 updateButtonPanel();
                                 updateRCMPanel();
                             }
@@ -326,6 +334,14 @@ public class RMOSPanel extends JPanel {
                             // Add machine button logic here.
                             RMOS.addMachine();
                             RMOS.saveStatus();
+                            try {
+                                updateGlobalStats();
+                                updateMachineStats();
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            } catch (ClassNotFoundException e1) {
+                                e1.printStackTrace();
+                            }
                             updateButtonPanel();
                             updateRCMList();
                         }
@@ -342,6 +358,15 @@ public class RMOSPanel extends JPanel {
                                 RecyclingMachine RCM = selectedRCM();
                                 RMOS.removeMachineWithID(RCM.getID());
                                 RMOS.saveStatus();
+
+                                try {
+                                    updateMachineStats();
+                                    updateGlobalStats();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                } catch (ClassNotFoundException e1) {
+                                    e1.printStackTrace();
+                                }
                                 updateRCMList();
 
                                 updateButtonPanel();
@@ -363,6 +388,14 @@ public class RMOSPanel extends JPanel {
                                 } catch (FileNotFoundException except) {
                                     System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
                                 }
+                                try {
+                                    updateMachineStats();
+                                    updateGlobalStats();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                } catch (ClassNotFoundException e1) {
+                                    e1.printStackTrace();
+                                }
                                 updateButtonPanel();
                                 updateRCMPanel();
                             }
@@ -383,6 +416,20 @@ public class RMOSPanel extends JPanel {
                                     RCM.saveStatus();
                                 } catch (FileNotFoundException except) {
                                     System.out.println("Could not find file to save RCM with ID "+RCM.getID()+".");
+                                }
+                                try {
+                                    updateGlobalStats();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                } catch (ClassNotFoundException e1) {
+                                    e1.printStackTrace();
+                                }
+                                try {
+                                    updateMachineStats();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                } catch (ClassNotFoundException e1) {
+                                    e1.printStackTrace();
                                 }
                                 updateButtonPanel();
                                 updateRCMPanel();
@@ -429,6 +476,7 @@ public class RMOSPanel extends JPanel {
                         public void actionPerformed(ActionEvent e) {
                             try {
                                 updateGlobalStats();
+                                updateMachineStats();
                             } catch (SQLException e1) {
                                 e1.printStackTrace();
                             } catch (ClassNotFoundException e1) {
