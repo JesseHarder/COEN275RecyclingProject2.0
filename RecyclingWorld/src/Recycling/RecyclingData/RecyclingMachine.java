@@ -225,14 +225,17 @@ public class RecyclingMachine {
         try {
             PrintWriter writer = new PrintWriter(nameForSaveFile());
 
-            writer.println(ID);
-            writer.println(location);
-            writer.println(moneyManager.getCashReserves());
-            writer.println(session.getMoneyOwed());
+            writer.println(ID); // 1. Record machine ID.
+            writer.println(location); // 2. Record machine location.
+            writer.println(moneyManager.getCashReserves()); // 3. Record current cash reserves.
 
-            for (Map.Entry entry:itemContainer.getContents().entrySet()) {
-                writer.println(entry.getKey() + "," + entry.getValue());
-            }
+            // Record item holder info..
+            writer.println(itemContainer.getWeightCapacity());  // 4. Record weight capactiy.
+            writer.println(itemContainer.contentsString());     // 5. Record total machine contents.
+
+            // Record current session information.
+            writer.println(session.getMoneyOwed()); // 6. Record money owed for session.
+            writer.println(session.getItemContainer().contentsString()); // 7. Record contents of session.
 
             writer.close();
         }
@@ -243,9 +246,10 @@ public class RecyclingMachine {
         try {
             FileInputStream fin = new FileInputStream(nameForSaveFile());
             Scanner sc = new Scanner(fin);
-            ID = sc.nextLine();
-            location = sc.nextLine();
-            double cash = sc.nextDouble();
+
+            ID = sc.nextLine(); // 1. Read ID.
+            location = sc.nextLine(); // 2. Read location.
+            double cash = sc.nextDouble(); // 3. 
             moneyManager.setCashReserves(cash);
             double owed = sc.nextDouble();
             session.setMoneyOwed(owed);

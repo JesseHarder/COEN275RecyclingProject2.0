@@ -97,4 +97,13 @@ public class ItemContainer {
 
         return val;
     }
+
+    /* Persistence stuff */
+    public String contentsString() {
+        String message = "";
+        for (Map.Entry entry:getContents().entrySet()) {
+            message = entry.getKey() + "," + entry.getValue() + ";";
+        }
+        return message;
+    }
 }
