@@ -562,7 +562,8 @@ public class RMOSPanel extends JPanel {
 
         currentRCMLabel.setText("Viewing Data for Recycling Machine ID: "+selectedRCMID);
         currentRCMLocationLabel.setText("Machine location: "+selectedRCMLocation);
-        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
+//        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
+        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+sRCM.getCashReserves());
         capacityRCMLabel.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+" ("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
         weightOfItemsLabel.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMID)));
         timesEmptiedLabel.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMID)));
