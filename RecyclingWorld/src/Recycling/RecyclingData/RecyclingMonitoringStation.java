@@ -84,10 +84,33 @@ public class RecyclingMonitoringStation {
         return ID;
     }
 
+    public String newLocation() {
+        boolean used = true;
+        String location;
+        Random rand = new Random();
+
+        do {
+            used = false;
+            int val = rand.nextInt(1000);
+            location = "Room " + String.valueOf(val);
+
+            // Check that ID is not currently used.
+            for (RecyclingMachine RCM:machines) {
+                if (location.equals(RCM.getID())) {
+                    used = true;
+                    break;
+                }
+            }
+        } while (used); // Keep trying until new ID is obtained.
+
+        return location;
+    }
+
     // Adds a new machine to the list of machines managed by this RMOS.
     public void addMachine() {
         RecyclingMachine RCM = new RecyclingMachine();
         RCM.setID(newID());
+        RCM.setLocation(newLocation());
         // Copy over the price list.
         for (Map.Entry<String,Double> entry:priceList.entrySet()) {
             RCM.setPrice(entry.getKey(), entry.getValue());
