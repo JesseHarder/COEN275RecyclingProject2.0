@@ -11,6 +11,8 @@ public class ItemContainer {
     private double weightCapacity;
     // A map of item names to weight of that item in the holder.
     private HashMap<String, Double> contents;
+    private Date lastEmptied;
+
 
     /* Constructors */
 
@@ -83,8 +85,14 @@ public class ItemContainer {
         // Empties the item holder.
     public void empty() {
         contents.clear();
+        this.lastEmptied = new Date();
     }
 
+    public String lastEmptied(){
+        if(lastEmptied==null){return "Has never been emptied before.";}
+        else{return this.lastEmptied.toString();}
+
+    }
     /* To String Method */
     @Override
     public String toString() {
