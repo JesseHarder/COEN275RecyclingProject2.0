@@ -144,21 +144,44 @@ public class RecyclingMonitoringStation {
             // 1. First line is Username and Password pairs.
             // There is a comma between each username and password.
             // There is a semicolon separating the pairs.
-            for (Map.Entry<String,String> entry:userPaswordMap.entrySet()) {
-                writer.print(entry.getKey() + "," + entry.getValue() + ";");
+            if (userPaswordMap.isEmpty()){
+                writer.print("no users");
+            } else {
+                for (Map.Entry<String,String> entry:userPaswordMap.entrySet()) {
+                    writer.print(entry.getKey() + "," + entry.getValue() + ";");
+                }
             }
+
+            writer.print("\n");
 
             // 2. Second line is comma-separated list of RCM IDs.
-            for (int i = 0; i < machines.size(); i++) {
-                // Tell machines to save their status.
-                machines.get(i).saveStatus();
+            if (machines.isEmpty()) {
+                writer.print("no machines");
+            } else {
+                for (RecyclingMachine RCM:machines) {
+                    // Tell machines to save their status.
+                    RCM.saveStatus();
 
-                // Record Machine IDs so they can load their status.
-                writer.print(machines.get(i).getID());
-                if (!(i < (machines.size()-1)))
-                    writer.print(",");
+                    // Record Machine IDs so they can load their status.
+                    writer.print(RCM.getID());
+                    writer.print(";");
+                }
+                for (int i = 0; i < machines.size(); i++) {
+
+                }
             }
             writer.print("\n");
+
+            // 3. Third line is item and price pairs.
+            // There is a comma between each item name and price.
+            // There is a semicolon separating the pairs.
+            if (priceList.isEmpty()) {
+                writer.print("no prices");
+            } else {
+                for (Map.Entry<String,Double> entry:priceList.entrySet()) {
+                    writer.print(entry.getKey() + "," + entry.getValue() + ";");
+                }
+            }
 
 
 
@@ -172,24 +195,44 @@ public class RecyclingMonitoringStation {
             FileInputStream fin = new FileInputStream(nameForSaveFile);
             Scanner sc = new Scanner(fin);
 
-            // Loading Usernames and passwords.
+            // 1. Loading Usernames and passwords.
             String userPassString = sc.nextLine();
-            String[] userPassPairs = userPassString.split(";");
-            for (String pair:userPassPairs) {
-                String [] s = pair.split(",");
-                String username = s[0];
-                String password = s[1];
-                userPaswordMap.put(username,password);
+            if (!userPassString.equals("no users")) {
+                String[] userPassPairs = userPassString.split(";");
+                for (String pair:userPassPairs) {
+                    String [] s = pair.split(",");
+                    String username = s[0];
+                    String password = s[1];
+                    userPaswordMap.put(username,password);
+                }
             }
 
-            // Loading RCMs.
+            // 2. Loading RCMs.
             String IDString = sc.nextLine();
-            String[] IDs = IDString.split(",");
-            for (String ID:IDs) {
-                RecyclingMachine RCM = new RecyclingMachine();
-                RCM.setID(ID);
-                RCM.loadStatus();
-                machines.add(RCM);
+            if (!IDString.equals("no machines")) {
+                String[] IDs = IDString.split(";");
+                for (String ID:IDs) {
+                    RecyclingMachine RCM = new RecyclingMachine();
+                    if (!ID.equals("")) {
+                        RCM.setID(ID);
+                        RCM.loadStatus();
+                        machines.add(RCM);
+                    }
+                }
+            }
+
+            // 3. Loading price list.
+            String pricesString = sc.nextLine();
+            if (!pricesString.equals("no prices")) {
+                String[] pricePairs = pricesString.split(";");
+                for (String pair:pricePairs) {
+                    if (!pair.equals("")) {
+                        String [] s = pair.split(",");
+                        String itemName = s[0];
+                        double price = Double.parseDouble(s[1]);
+                        priceList.put(itemName,price);
+                    }
+                }
             }
 
             fin.close();
