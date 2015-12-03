@@ -227,15 +227,16 @@ public class RecyclingMachine {
 
             writer.println(ID);                             // 1. Record machine ID.
             writer.println(location);                       // 2. Record machine location.
-            writer.println(moneyManager.getCashReserves()); // 3. Record current cash reserves.
+            writer.println(active);                         // 3. Record active status.
+            writer.println(moneyManager.getCashReserves()); // 4. Record current cash reserves.
 
             // Record item holder info..
-            writer.println(itemContainer.getWeightCapacity());  // 4. Record weight capactiy.
-            writer.println(itemContainer.contentsString());     // 5. Record total machine contents.
+            writer.println(itemContainer.getWeightCapacity());  // 5. Record weight capactiy.
+            writer.println(itemContainer.contentsString());     // 6. Record total machine contents.
 
             // Record current session information.
-            writer.println(session.getMoneyOwed());                      // 6. Record money owed for session.
-            writer.println(session.getItemContainer().contentsString()); // 7. Record contents of session.
+            writer.println(session.getMoneyOwed());                      // 7. Record money owed for session.
+            writer.println(session.getItemContainer().contentsString()); // 8. Record contents of session.
 
             writer.close();
         }
@@ -249,20 +250,21 @@ public class RecyclingMachine {
 
             ID = sc.nextLine();                             // 1. Read ID.
             location = sc.nextLine();                       // 2. Read location.
+            active = Boolean.parseBoolean(sc.nextLine());   // 3. Read active status.
 
-            double cash = sc.nextDouble();                  // 3. Load money reserves.
+            double cash = sc.nextDouble();                  // 4. Load money reserves.
             moneyManager.setCashReserves(cash);
 
-            double weightCapactiy = sc.nextDouble();        // 4. Load weight limit.
+            double weightCapactiy = sc.nextDouble();        // 5. Load weight limit.
             itemContainer.setWeightCapacity(weightCapactiy);
 
-            String contentsString = sc.nextLine();          // 5. Load itemContainer contents.
+            String contentsString = sc.nextLine();          // 6. Load itemContainer contents.
             itemContainer.initWithContents(contentsString);
 
-            double owed = sc.nextDouble();                  // 6. Load money owed for session.
+            double owed = sc.nextDouble();                  // 7. Load money owed for session.
             session.setMoneyOwed(owed);
 
-            String sessionContentsString = sc.nextLine();   // 7. Load session contents.
+            String sessionContentsString = sc.nextLine();   // 8. Load session contents.
             session.getItemContainer().initWithContents(sessionContentsString);
 
             fin.close();

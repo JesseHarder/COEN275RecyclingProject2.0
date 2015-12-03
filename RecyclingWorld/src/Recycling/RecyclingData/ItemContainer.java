@@ -82,7 +82,6 @@ public class ItemContainer {
 
         // Empties the item holder.
     public void empty() {
-        /* Loop to remove all items from list. */
         contents.clear();
     }
 
@@ -100,21 +99,30 @@ public class ItemContainer {
 
     /* Persistence stuff */
     public String contentsString() {
-        String message = "";
-        for (Map.Entry entry:getContents().entrySet()) {
-            message = entry.getKey() + "," + entry.getValue() + ";";
+        String message;
+        if (contents.isEmpty()) {
+            message = "empty";
+        } else {
+            message = "";
+            for (Map.Entry entry:getContents().entrySet()) {
+                message = entry.getKey() + "," + entry.getValue() + ";";
+            }
         }
+
         return message;
     }
 
     public void initWithContents(String contentsString) {
-        String [] elements = contentsString.split(";");
-        for (String element:elements) {
-            String [] parts = element.split(",");
-            String name = parts[0];
-            String weightString = parts[1];
-            double weight = Double.parseDouble(weightString);
-            depositItem(name, weight);
+        System.out.println(contentsString);
+        if (!contentsString.equals("empty")) {
+            String [] elements = contentsString.split(";");
+            for (String element:elements) {
+                String [] parts = element.split(",");
+                String name = parts[0];
+                String weightString = parts[1];
+                double weight = Double.parseDouble(weightString);
+                depositItem(name, weight);
+            }
         }
     }
 }
