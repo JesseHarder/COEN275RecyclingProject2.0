@@ -55,7 +55,7 @@ public class RecyclingMachine {
                 false,                  // Default active status.
                 "Default ID",           // Default RCM ID.
                 "Default Location",     // Default RCM location.
-                0.0,                    // Default money amount.
+                500.0,                    // Default money amount.
                 100.0                   // Default weight capacity.
                 // No default info needed for priceList.
         );
