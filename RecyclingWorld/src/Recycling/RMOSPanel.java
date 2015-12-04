@@ -604,19 +604,30 @@ public class RMOSPanel extends JPanel {
     }
 
     public void updateMachineStats() throws SQLException, ClassNotFoundException {
-        RecyclingMachine sRCM = selectedRCM();
-        String selectedRCMID = sRCM.getID();
-        String selectedRCMLocation = sRCM.getLocation();
+        if (!RMOS.getMachines().isEmpty()) {
+            RecyclingMachine sRCM = selectedRCM();
+            String selectedRCMID = sRCM.getID();
+            String selectedRCMLocation = sRCM.getLocation();
 
-        currentRCMLabel.setText("Viewing Data for Recycling Machine ID: "+selectedRCMID);
-        currentRCMLocationLabel.setText("Machine location: "+selectedRCMLocation);
+            currentRCMLabel.setText("Viewing Data for Recycling Machine ID: "+selectedRCMID);
+            currentRCMLocationLabel.setText("Machine location: "+selectedRCMLocation);
 //        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+RecHelper.formatDoubleAmount(sRCM.getMoneyManager().getCashReserves(), 2));
-        moneyInRCMLabel.setText("Cash in Recycling Machine: $"+sRCM.getCashReserves());
-        capacityRCMLabel.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+" ("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
-        weightOfItemsLabel.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMID)));
-        timesEmptiedLabel.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMID)));
-        lastEmptiedLabel.setText("Last Emptied: "+sRCM.getItemContainer().lastEmptied());
-        timesUsedLabel.setText("Number of Times Used: "+String.valueOf(Statistics.timesUsed(selectedRCMID)));
+            moneyInRCMLabel.setText("Cash in Recycling Machine: $"+sRCM.getCashReserves());
+            capacityRCMLabel.setText("Remaining Capacity of RCM: "+RecHelper.formatDoubleAmount(sRCM.getItemContainer().getRemainingSpace(),2)+" ("+String.valueOf(sRCM.getItemContainer().getContentsWeight())+" used of "+String.valueOf(sRCM.getItemContainer().getWeightCapacity())+")");
+            weightOfItemsLabel.setText("Total Weight of All Items Recycled: "+String.valueOf(Statistics.getTotalItemWeightByID(selectedRCMID)));
+            timesEmptiedLabel.setText("Number of Times Emptied: "+String.valueOf(Statistics.timesEmptied(selectedRCMID)));
+            lastEmptiedLabel.setText("Last Emptied: "+sRCM.getItemContainer().lastEmptied());
+            timesUsedLabel.setText("Number of Times Used: "+String.valueOf(Statistics.timesUsed(selectedRCMID)));
+        } else {
+            currentRCMLabel.setText("No machine.");
+            currentRCMLocationLabel.setText("No machine.");
+            moneyInRCMLabel.setText("No machine.");
+            capacityRCMLabel.setText("No machine.");
+            weightOfItemsLabel.setText("No machine.");
+            timesEmptiedLabel.setText("No machine.");
+            lastEmptiedLabel.setText("No machine.");
+            timesUsedLabel.setText("No machine.");
+        }
     }
 
     public void updateGlobalStats() throws SQLException, ClassNotFoundException {

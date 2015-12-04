@@ -60,9 +60,9 @@ public class Statistics{
                         "MONEY REAL,"+
                         "EMPTIED INT);";
         update(sql,"Tables built. Ready to run statistics.");
-        if(checkEmpty()==0){String filltable = "INSERT INTO TRANSACTIONS VALUES (null,null,null,null,null,null,null,null)";
-        update(filltable,"");
-        }
+//        if(checkEmpty()==0){String filltable = "INSERT INTO TRANSACTIONS VALUES (null,null,null,null,null,null,null,null)";
+//        update(filltable,"");
+//        }
     }
 
 
