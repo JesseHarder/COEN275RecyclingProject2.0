@@ -359,6 +359,7 @@ public class RMOSPanel extends JPanel {
                                 RMOS.removeMachineWithID(RCM.getID());
                                 RMOS.saveStatus();
 
+                                updateRCMList();
                                 try {
                                     updateMachineStats();
                                     updateGlobalStats();
@@ -367,8 +368,6 @@ public class RMOSPanel extends JPanel {
                                 } catch (ClassNotFoundException e1) {
                                     e1.printStackTrace();
                                 }
-                                updateRCMList();
-
                                 updateButtonPanel();
                                 updateRCMPanel();
                         }
@@ -551,6 +550,7 @@ public class RMOSPanel extends JPanel {
         if (RMOS.getMachines().isEmpty() || rcmJList.getModel().getSize() == 0)
             return null;
         else
+            System.out.println(RMOS);
             return RMOS.getMachines().get(rcmJList.getSelectedIndex());
     }
 
