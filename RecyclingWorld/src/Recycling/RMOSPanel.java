@@ -181,7 +181,8 @@ public class RMOSPanel extends JPanel {
             passwordPanel.setLayout(new FlowLayout());
                 passwordLabel = new JLabel("Password:");
                 passwordPanel.add(passwordLabel);
-                passwordField = new JTextField(10);
+                passwordField = new JPasswordField(10);
+                ((JPasswordField)passwordField).setEchoChar('*');
                 passwordPanel.add(passwordField);
             authenticationCard.add(passwordPanel);
 
